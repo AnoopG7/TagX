@@ -1,0 +1,211 @@
+@import "tailwindcss";
+
+/* ============================================
+   TagX — Stealth-Luxury Tech Design System
+   ============================================ */
+
+@theme {
+  /* ---- Color Palette ---- */
+  --color-tagx-bg: #0A0A0B;
+  --color-tagx-surface: #141416;
+  --color-tagx-surface-elevated: #1C1C1F;
+  --color-tagx-border: #2A2A2E;
+  --color-tagx-border-subtle: #1E1E22;
+  --color-tagx-text: #EAEAEA;
+  --color-tagx-text-secondary: #B0B0B5;
+  --color-tagx-muted: #8A8A8E;
+  --color-tagx-accent: #00E5FF;
+  --color-tagx-accent-hover: #00C8E0;
+  --color-tagx-warm: #FFB347;
+  --color-tagx-warm-hover: #FFA030;
+  --color-tagx-danger: #FF4757;
+  --color-tagx-success: #2ED573;
+
+  /* ---- Typography ---- */
+  --font-display: 'Clash Display', sans-serif;
+  --font-body: 'Satoshi', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* ---- Spacing Scale ---- */
+  --spacing-page: clamp(1rem, 5vw, 6rem);
+
+  /* ---- Border Radius ---- */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* ---- Shadows ---- */
+  --shadow-glow-accent: 0 0 20px rgba(0, 229, 255, 0.15);
+  --shadow-glow-warm: 0 0 20px rgba(255, 179, 71, 0.15);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-elevated: 0 8px 40px rgba(0, 0, 0, 0.6);
+
+  /* ---- Animation Durations ---- */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-glacial: 800ms;
+
+  /* ---- Easing ---- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+
+/* ---- Base Resets ---- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-tagx-bg);
+  color: var(--color-tagx-text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Subtle noise grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* ---- Headings ---- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* ---- Links ---- */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---- Images ---- */
+img, video {
+  max-width: 100%;
+  display: block;
+}
+
+/* ---- Selection ---- */
+::selection {
+  background-color: var(--color-tagx-accent);
+  color: var(--color-tagx-bg);
+}
+
+/* ---- Scrollbar (Webkit) ---- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-tagx-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-tagx-border);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-tagx-muted);
+}
+
+/* ---- Utility Classes ---- */
+.glassmorphism {
+  background: rgba(20, 20, 22, 0.7);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--color-tagx-border-subtle);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, var(--color-tagx-accent), #0088FF);
+}
+
+.gradient-warm {
+  background: linear-gradient(135deg, var(--color-tagx-warm), #FF6B35);
+}
+
+.gradient-mesh {
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(255, 179, 71, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(0, 136, 255, 0.04) 0%, transparent 50%);
+}
+
+.text-gradient-accent {
+  background: linear-gradient(135deg, var(--color-tagx-accent), #0088FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-warm {
+  background: linear-gradient(135deg, var(--color-tagx-warm), #FF6B35);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---- Radar Ping Animation ---- */
+@keyframes radar-ping {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.radar-ping {
+  animation: radar-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* ---- Pulse Glow ---- */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 229, 255, 0.4);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* ---- Container ---- */
+.container-tagx {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: var(--spacing-page);
+}
