@@ -1,64 +1,175 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
 
 /* ============================================
-   TagX — Stealth-Luxury Tech Design System
+   TagX — Premium Design System
+   Dark theme · HSL opacity–compatible
    ============================================ */
 
 @theme {
-  /* ---- Color Palette ---- */
-  --color-tagx-bg: #0A0A0B;
-  --color-tagx-surface: #141416;
-  --color-tagx-surface-elevated: #1C1C1F;
-  --color-tagx-border: #2A2A2E;
-  --color-tagx-border-subtle: #1E1E22;
-  --color-tagx-text: #EAEAEA;
-  --color-tagx-text-secondary: #B0B0B5;
-  --color-tagx-muted: #8A8A8E;
-  --color-tagx-accent: #00E5FF;
-  --color-tagx-accent-hover: #00C8E0;
-  --color-tagx-warm: #FFB347;
-  --color-tagx-warm-hover: #FFA030;
-  --color-tagx-danger: #FF4757;
-  --color-tagx-success: #2ED573;
+  /* ---- Semantic Surface Colors ---- */
+  --color-surface: #0F172A;
+  --color-surface-elevated: #111C31;
+  --color-surface-hover: #16233D;
+  --color-surface-glass: rgba(15, 23, 42, 0.7);
+  --color-ai: #6D5DFC;
+  --color-ai-foreground: #F8FAFC;
+  --color-warning: #FFB547;
+  --color-warning-foreground: #0A0E17;
+  --color-success: #00D4AA;
+  --color-success-foreground: #0A0E17;
+
+  /* ---- Border / Ring System (fixed, no HSL opacity needed) ---- */
+  --color-border: rgba(255, 255, 255, 0.05);
+  --color-border-hover: rgba(255, 255, 255, 0.08);
+  --color-border-active: rgba(255, 255, 255, 0.12);
+  --color-ring: rgba(0, 212, 170, 0.4);
 
   /* ---- Typography ---- */
-  --font-display: 'Clash Display', sans-serif;
-  --font-body: 'Satoshi', sans-serif;
+  --font-display: 'Geist Variable', 'Geist', sans-serif;
+  --font-body: 'Geist Variable', 'Geist', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* ---- Spacing Scale ---- */
+  /* ---- Spacing ---- */
   --spacing-page: clamp(1rem, 5vw, 6rem);
 
-  /* ---- Border Radius ---- */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --radius-full: 9999px;
+  /* ---- Shadows (elevation hierarchy) ---- */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.6);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-glow-primary: 0 0 20px rgba(0, 212, 170, 0.06);
+  --shadow-glow-ai: 0 0 20px rgba(109, 93, 252, 0.06);
+  --shadow-glow-warning: 0 0 20px rgba(255, 181, 71, 0.06);
+  --shadow-btn-primary: 0 2px 8px rgba(0, 212, 170, 0.15);
+  --shadow-dialog: 0 20px 60px rgba(0, 0, 0, 0.7);
 
-  /* ---- Shadows ---- */
-  --shadow-glow-accent: 0 0 20px rgba(0, 229, 255, 0.15);
-  --shadow-glow-warm: 0 0 20px rgba(255, 179, 71, 0.15);
-  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
-  --shadow-elevated: 0 8px 40px rgba(0, 0, 0, 0.6);
-
-  /* ---- Animation Durations ---- */
+  /* ---- Animation ---- */
   --duration-fast: 150ms;
-  --duration-normal: 300ms;
-  --duration-slow: 500ms;
-  --duration-glacial: 800ms;
-
-  /* ---- Easing ---- */
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
 }
 
+/* ---- shadcn Theme Inline (mapped to HSL vars for opacity modifiers) ---- */
+@theme inline {
+  --font-heading: var(--font-display);
+  --font-sans: var(--font-body);
 
-/* ---- Base Resets ---- */
-*,
-*::before,
-*::after {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.25);
+}
+
+/* ============================================
+   HSL Tokens — Dark Theme (Default)
+   No hsl() wrapper, no commas, one space
+   Enables: bg-primary/80 → works
+   ============================================ */
+:root {
+  --background: 222 47% 6%;
+  --foreground: 210 40% 98%;
+  --card: 220 40% 11%;
+  --card-foreground: 210 40% 98%;
+  --popover: 220 40% 11%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 166 100% 42%;
+  --primary-foreground: 222 47% 6%;
+  --secondary: 218 35% 13%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 218 35% 13%;
+  --muted-foreground: 215 20% 55%;
+  --accent: 248 96% 68%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 353 100% 68%;
+  --destructive-foreground: 210 40% 98%;
+  --chart-1: 166 100% 42%;
+  --chart-2: 248 96% 68%;
+  --chart-3: 38 100% 64%;
+  --chart-4: 353 100% 68%;
+  --chart-5: 215 20% 55%;
+  --radius: 0.5rem;
+  --sidebar: 220 40% 11%;
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-primary: 166 100% 42%;
+  --sidebar-primary-foreground: 222 47% 6%;
+  --sidebar-accent: 248 96% 68%;
+  --sidebar-accent-foreground: 210 40% 98%;
+  --sidebar-border: rgba(255, 255, 255, 0.05);
+  --sidebar-ring: rgba(0, 212, 170, 0.4);
+}
+
+/* ---- Light Theme (Future) ---- */
+.light {
+  --background: 210 40% 98%;
+  --foreground: 222 47% 6%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 6%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 6%;
+  --primary: 162 93% 36%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 6%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 20% 55%;
+  --accent: 248 96% 68%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 353 100% 68%;
+  --destructive-foreground: 0 0% 100%;
+  --radius: 0.5rem;
+  --sidebar: 0 0% 100%;
+  --sidebar-foreground: 222 47% 6%;
+  --sidebar-primary: 162 93% 36%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 248 96% 68%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-ring: rgba(0, 168, 107, 0.4);
+}
+
+/* ============================================
+   Base Resets
+   ============================================ */
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -72,140 +183,85 @@ html {
 
 body {
   font-family: var(--font-body);
-  background-color: var(--color-tagx-bg);
-  color: var(--color-tagx-text);
-  line-height: 1.6;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  line-height: 1.65;
   overflow-x: hidden;
-  position: relative;
 }
 
-/* Subtle noise grain overlay */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-}
-
-/* ---- Headings ---- */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 600;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
-/* ---- Links ---- */
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* ---- Images ---- */
-img, video {
-  max-width: 100%;
-  display: block;
-}
-
-/* ---- Selection ---- */
 ::selection {
-  background-color: var(--color-tagx-accent);
-  color: var(--color-tagx-bg);
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
 }
 
-/* ---- Scrollbar (Webkit) ---- */
-::-webkit-scrollbar {
-  width: 6px;
-}
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.06); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.12); }
 
-::-webkit-scrollbar-track {
-  background: var(--color-tagx-bg);
-}
+/* ============================================
+   Typography Scale
+   ============================================ */
+.text-display-xl { font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 700; line-height: 1.02; letter-spacing: -0.04em; }
+.text-display    { font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.035em; }
+.text-h1         { font-size: clamp(2rem, 4vw, 2.5rem); font-weight: 600; line-height: 1.08; letter-spacing: -0.03em; }
+.text-h2         { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; line-height: 1.1; letter-spacing: -0.025em; }
+.text-h3         { font-size: 1.5rem; font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; }
+.text-h4         { font-size: 1.25rem; font-weight: 600; line-height: 1.2; letter-spacing: -0.015em; }
+.text-body-large { font-size: 1.125rem; font-weight: 400; line-height: 1.65; letter-spacing: -0.01em; }
+.text-body       { font-size: 1rem; font-weight: 400; line-height: 1.65; letter-spacing: -0.005em; }
+.text-body-small { font-size: 0.875rem; font-weight: 400; line-height: 1.55; letter-spacing: 0; }
+.text-caption    { font-size: 0.75rem; font-weight: 500; line-height: 1.4; letter-spacing: 0.04em; text-transform: uppercase; }
 
-::-webkit-scrollbar-thumb {
-  background: var(--color-tagx-border);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-tagx-muted);
-}
-
-/* ---- Utility Classes ---- */
-.glassmorphism {
-  background: rgba(20, 20, 22, 0.7);
+/* ============================================
+   Utility Classes
+   ============================================ */
+.glass {
+  background: var(--color-surface-glass);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid var(--color-tagx-border-subtle);
+  border: 1px solid var(--color-border);
 }
 
-.gradient-accent {
-  background: linear-gradient(135deg, var(--color-tagx-accent), #0088FF);
+.track-gradient  { background: linear-gradient(135deg, hsl(var(--primary)), #4ADE80); }
+.ai-gradient     { background: linear-gradient(135deg, #6D5DFC, #8B5CF6); }
+.warning-gradient { background: linear-gradient(135deg, #FFB547, #F97316); }
+
+.text-gradient-primary {
+  background: linear-gradient(135deg, hsl(var(--primary)), #4ADE80);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 
-.gradient-warm {
-  background: linear-gradient(135deg, var(--color-tagx-warm), #FF6B35);
+.text-gradient-ai {
+  background: linear-gradient(135deg, #6D5DFC, #8B5CF6);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 
-.gradient-mesh {
-  background: 
-    radial-gradient(ellipse at 20% 50%, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(255, 179, 71, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 60% 80%, rgba(0, 136, 255, 0.04) 0%, transparent 50%);
-}
+.glow-primary { box-shadow: 0 0 30px rgba(0, 212, 170, 0.06); }
+.glow-ai { box-shadow: 0 0 30px rgba(109, 93, 252, 0.06); }
 
-.text-gradient-accent {
-  background: linear-gradient(135deg, var(--color-tagx-accent), #0088FF);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+/* ---- Animations ---- */
+@keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+@keyframes slide-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes scale-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-.text-gradient-warm {
-  background: linear-gradient(135deg, var(--color-tagx-warm), #FF6B35);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+.animate-pulse-soft { animation: pulse-soft 2s var(--ease-in-out-expo) infinite; }
+.animate-slide-up { animation: slide-up var(--duration-normal) var(--ease-out-expo); }
+.animate-scale-in { animation: scale-in var(--duration-normal) var(--ease-out-expo); }
 
-/* ---- Radar Ping Animation ---- */
-@keyframes radar-ping {
-  0% {
-    transform: scale(0.5);
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(2.5);
-    opacity: 0;
-  }
-}
-
-.radar-ping {
-  animation: radar-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-/* ---- Pulse Glow ---- */
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(0, 229, 255, 0.4);
-  }
-}
-
-.pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-/* ---- Container ---- */
-.container-tagx {
-  width: 100%;
-  max-width: 1280px;
-  margin-inline: auto;
-  padding-inline: var(--spacing-page);
+/* ============================================
+   shadcn Base Layer
+   ============================================ */
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  body { @apply bg-background text-foreground; }
+  html { @apply font-sans; }
 }
