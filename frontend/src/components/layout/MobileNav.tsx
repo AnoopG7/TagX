@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { LayoutDashboard, Users, Bell, Settings, LogOut } from "lucide-react";
 import { NAV_LINKS } from "@/lib/constants";
 import { useUIStore } from "@/stores/uiStore";
 import { useAuthStore } from "@/stores/authStore";
@@ -7,9 +8,16 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
+const authLinks = [
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/family", label: "Family", icon: Users },
+  { href: "/alerts", label: "Alerts", icon: Bell },
+  { href: "/settings", label: "Settings", icon: Settings },
+];
+
 export function MobileNav() {
   const { isMobileNavOpen, closeMobileNav } = useUIStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, logout } = useAuthStore();
   const location = useLocation();
 
   return (
@@ -45,25 +53,54 @@ export function MobileNav() {
               </motion.div>
             ))}
 
-            <Separator className="my-4 bg-border" />
+            {isAuthenticated && (
+              <>
+                <Separator className="my-4" />
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium px-1">
+                  Dashboard
+                </p>
+                {authLinks.map((link, i) => (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 + i * 0.05, duration: 0.3 }}
+                  >
+                    <Link
+                      to={link.href}
+                      onClick={closeMobileNav}
+                      className="flex items-center gap-3 py-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <link.icon className="size-4" />
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ))}
+                <Separator className="my-4" />
+                <button
+                  onClick={() => { logout(); closeMobileNav(); }}
+                  className="flex items-center gap-3 py-2.5 text-sm text-destructive transition-colors"
+                >
+                  <LogOut className="size-4" />
+                  Logout
+                </button>
+              </>
+            )}
 
             {!isAuthenticated && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35, duration: 0.3 }}
-                className="flex flex-col gap-3"
+                className="flex flex-col gap-3 mt-4"
               >
                 <Link to="/login" onClick={closeMobileNav}>
-                  <Button
-                    variant="outline"
-                    className="w-full border-border text-foreground hover:bg-surface"
-                  >
+                  <Button variant="outline" className="w-full">
                     Sign In
                   </Button>
                 </Link>
                 <Link to="/signup" onClick={closeMobileNav}>
-                  <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
+                  <Button className="w-full">
                     Get Started
                   </Button>
                 </Link>

@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingCart, Star, Eye } from "lucide-react";
+import { ShoppingCart, Eye } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { formatPrice, cn } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils";
 import type { Product } from "@/types/product.types";
 
 export function ProductCard({
@@ -38,7 +38,7 @@ export function ProductCard({
       <Card className="group relative overflow-hidden bg-card border-border hover:border-primary/30 transition-all duration-200 h-full">
         <Link to={`/products/${product.slug}`} className="block relative overflow-hidden aspect-square">
           <img
-            src={product.images[0] || "/placeholder.jpg"}
+            src={product.images[0]?.url || "/placeholder.jpg"}
             alt={product.name}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             loading="lazy"
@@ -81,22 +81,10 @@ export function ProductCard({
             </h3>
           </Link>
 
-          {product.rating > 0 && (
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className={cn(
-                    "w-3 h-3",
-                    i < Math.round(product.rating)
-                      ? "fill-amber-400 text-amber-400"
-                      : "text-border"
-                  )}
-                />
-              ))}
-              <span className="text-[11px] text-muted-foreground ml-1">
-                ({product.reviewCount})
-              </span>
+          {product.averageRating > 0 && (
+            <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+              <span className="text-amber-400 font-medium">{product.averageRating.toFixed(1)}</span>
+              <span>({product.reviewCount} reviews)</span>
             </div>
           )}
 

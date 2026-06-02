@@ -13,7 +13,7 @@ export interface StatCardProps {
 }
 
 const variantStyles = {
-  default: { iconBg: 'bg-surface-elevated', iconColor: 'text-foreground' },
+  default: { iconBg: 'bg-muted', iconColor: 'text-foreground' },
   primary: { iconBg: 'bg-primary/10', iconColor: 'text-primary' },
   ai: { iconBg: 'bg-ai/10', iconColor: 'text-ai' },
 };

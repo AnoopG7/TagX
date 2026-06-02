@@ -46,7 +46,7 @@ export function AIInsightCard({
           <div className="flex items-start gap-4">
             <div className={cn(
               "w-9 h-9 rounded-lg flex items-center justify-center shrink-0",
-              type === 'alert' ? 'bg-warning/10' : 'bg-surface-elevated'
+              type === 'alert' ? 'bg-warning/10' : 'bg-muted'
             )}>
               <Icon className={cn("w-4.5 h-4.5", config.color)} />
             </div>

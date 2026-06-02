@@ -43,7 +43,7 @@ export function SmartNotification({
       transition={{ duration: 0.2 }}
       className={cn(
         "group relative flex items-start gap-3 p-4 rounded-lg border transition-all duration-200",
-        read ? 'bg-background border-border' : 'bg-surface-elevated border-primary/20',
+        read ? 'bg-background border-border' : 'bg-muted border-primary/20',
         className
       )}
     >
@@ -52,7 +52,7 @@ export function SmartNotification({
       )}
       <div className={cn(
         "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
-        read ? 'bg-muted' : 'bg-surface'
+        read ? 'bg-muted' : 'bg-muted/50'
       )}>
         <Icon className={cn("w-4 h-4", config.color)} />
       </div>

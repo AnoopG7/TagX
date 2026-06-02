@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingCart, User, Menu, Search, X } from "lucide-react";
+import {
+  LayoutDashboard, Settings, Users, Bell, Menu, X, LogOut,
+} from "lucide-react";
 import { Logo } from "@/components/common/Logo";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 import { Container } from "@/components/layout/Container";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { Button } from "@/components/ui/button";
@@ -13,10 +16,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
 import { NAV_LINKS } from "@/lib/constants";
 import { useAuthStore } from "@/stores/authStore";
-import { useCartStore } from "@/stores/cartStore";
 import { useUIStore } from "@/stores/uiStore";
 import { cn } from "@/lib/utils";
 
@@ -24,8 +25,6 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuthStore();
-  const itemCount = useCartStore((s) => s.getItemCount());
-  const openCart = useCartStore((s) => s.openCart);
   const { isMobileNavOpen, toggleMobileNav, closeMobileNav } = useUIStore();
 
   useEffect(() => {
@@ -79,62 +78,48 @@ export function Navbar() {
               ))}
             </div>
 
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-foreground hover:bg-accent"
-                aria-label="Search"
-              >
-                <Search className="w-5 h-5" />
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-foreground hover:bg-accent relative"
-                onClick={openCart}
-                aria-label="Cart"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                {itemCount > 0 && (
-                  <Badge className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1 text-[10px] font-bold bg-primary text-primary-foreground border-0">
-                    {itemCount > 99 ? "99+" : itemCount}
-                  </Badge>
-                )}
-              </Button>
-
+            <div className="flex items-center gap-1.5">
+              <ThemeToggle />
               {isAuthenticated ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
-                      size="icon"
-                      className="text-muted-foreground hover:text-foreground hover:bg-accent"
+                      size="icon-sm"
+                      className="text-muted-foreground hover:text-foreground"
                       aria-label="User menu"
                     >
-                      <User className="w-5 h-5" />
+                      <div className="size-7 rounded-full bg-primary/10 flex items-center justify-center">
+                        <span className="text-xs font-semibold text-primary">
+                          {user?.name?.charAt(0)?.toUpperCase() || "U"}
+                        </span>
+                      </div>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    align="end"
-                    className="w-48"
-                  >
+                  <DropdownMenuContent align="end" className="w-52">
                     <div className="px-3 py-2">
-                      <p className="text-sm font-medium text-foreground">
-                        {user?.name}
-                      </p>
+                      <p className="text-sm font-medium text-foreground">{user?.name}</p>
                       <p className="text-xs text-muted-foreground">{user?.email}</p>
                     </div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
                       <Link to="/dashboard" className="cursor-pointer">
-                        Dashboard
+                        <LayoutDashboard className="mr-2 size-4" /> Dashboard
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link to="/dashboard/orders" className="cursor-pointer">
-                        My Orders
+                      <Link to="/family" className="cursor-pointer">
+                        <Users className="mr-2 size-4" /> Family
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/alerts" className="cursor-pointer">
+                        <Bell className="mr-2 size-4" /> Alerts
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/settings" className="cursor-pointer">
+                        <Settings className="mr-2 size-4" /> Settings
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -142,17 +127,13 @@ export function Navbar() {
                       onClick={() => logout()}
                       className="text-destructive cursor-pointer"
                     >
-                      Logout
+                      <LogOut className="mr-2 size-4" /> Logout
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
                 <Link to="/login">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="hidden sm:flex text-muted-foreground hover:text-foreground hover:bg-accent"
-                  >
+                  <Button variant="ghost" size="sm" className="hidden sm:flex">
                     Sign In
                   </Button>
                 </Link>
@@ -160,15 +141,15 @@ export function Navbar() {
 
               <Button
                 variant="ghost"
-                size="icon"
-                className="md:hidden text-muted-foreground hover:text-foreground hover:bg-accent"
+                size="icon-sm"
+                className="md:hidden text-muted-foreground hover:text-foreground"
                 onClick={toggleMobileNav}
                 aria-label="Menu"
               >
                 {isMobileNavOpen ? (
-                  <X className="w-5 h-5" />
+                  <X className="size-5" />
                 ) : (
-                  <Menu className="w-5 h-5" />
+                  <Menu className="size-5" />
                 )}
               </Button>
             </div>
@@ -177,8 +158,6 @@ export function Navbar() {
       </motion.header>
 
       <MobileNav />
-
-      <div className="h-16 md:h-18" />
     </>
   );
 }

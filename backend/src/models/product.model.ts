@@ -5,7 +5,8 @@ export type ProductCategory =
   | "pet"
   | "vehicle"
   | "luggage"
-  | "kids";
+  | "kids"
+  | "enterprise";
 
 export interface IProductImage {
   url: string;
@@ -109,7 +110,7 @@ const productSchema = new Schema<IProduct>(
       type: String,
       required: [true, "Category is required"],
       enum: {
-        values: ["personal", "pet", "vehicle", "luggage", "kids"],
+          values: ["personal", "pet", "vehicle", "luggage", "kids", "enterprise"],
         message: "{VALUE} is not a valid category",
       },
     },

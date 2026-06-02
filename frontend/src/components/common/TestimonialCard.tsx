@@ -17,7 +17,7 @@ export function TestimonialCard({
   return (
     <div
       className={cn(
-        "p-6 rounded-xl bg-surface border border-border relative group transition-all duration-200"
+        "p-6 rounded-xl bg-card border relative group transition-all duration-200"
       )}
     >
       <span className="absolute top-4 right-6 text-5xl font-display text-border leading-none select-none">

@@ -1,8 +1,8 @@
-// ---- Product Types ----
-
-export interface ProductColor {
-  name: string;
-  hex: string;
+export interface ProductImage {
+  url: string;
+  publicId: string;
+  alt: string;
+  isPrimary: boolean;
 }
 
 export interface ProductSpecs {
@@ -14,12 +14,19 @@ export interface ProductSpecs {
   connectivity: string;
 }
 
+export interface ProductSEO {
+  metaTitle: string;
+  metaDescription: string;
+  keywords: string[];
+}
+
 export type ProductCategory =
   | "personal"
   | "pet"
   | "vehicle"
   | "luggage"
-  | "kids";
+  | "kids"
+  | "enterprise";
 
 export interface Product {
   _id: string;
@@ -29,44 +36,27 @@ export interface Product {
   shortDescription: string;
   price: number;
   compareAtPrice?: number;
-  images: string[];
+  images: ProductImage[];
   category: ProductCategory;
-  colors: ProductColor[];
+  tags: string[];
   features: string[];
   specs: ProductSpecs;
-  stock: number;
-  rating: number;
-  reviewCount: number;
   isFeatured: boolean;
   isActive: boolean;
+  seo: ProductSEO;
+  averageRating: number;
+  reviewCount: number;
   createdAt: string;
   updatedAt: string;
 }
-
-export interface Review {
-  _id: string;
-  user: {
-    _id: string;
-    name: string;
-    avatar?: string;
-  };
-  product: string;
-  rating: number;
-  title: string;
-  comment: string;
-  isVerifiedPurchase: boolean;
-  createdAt: string;
-}
-
-// ---- Product Query Params ----
 
 export interface ProductQueryParams {
   page?: number;
   limit?: number;
   category?: ProductCategory;
+  tag?: string;
   search?: string;
   sort?: string;
   minPrice?: number;
   maxPrice?: number;
-  rating?: number;
 }

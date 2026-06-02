@@ -1,7 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
-
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
@@ -9,8 +8,16 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        "active":
-          "bg-primary/10 text-primary border-primary/20 [a]:hover:bg-primary/15",
+        default: "bg-primary text-primary-foreground [a]:hover:bg-primary/80",
+        secondary:
+          "bg-secondary text-secondary-foreground [a]:hover:bg-secondary/80",
+        destructive:
+          "bg-destructive/10 text-destructive focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:focus-visible:ring-destructive/40 [a]:hover:bg-destructive/20",
+        outline:
+          "border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground",
+        ghost:
+          "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
+        link: "text-primary underline-offset-4 hover:underline",
         success:
           "bg-primary/10 text-primary border-primary/20 [a]:hover:bg-primary/15",
         warning:
@@ -19,21 +26,19 @@ const badgeVariants = cva(
           "bg-destructive/10 text-destructive border-destructive/20 [a]:hover:bg-destructive/15",
         ai:
           "bg-ai/10 text-ai border-ai/20 [a]:hover:bg-ai/15",
-        outline:
-          "border-[var(--color-border)] text-muted-foreground [a]:hover:bg-surface-hover [a]:hover:text-foreground",
-        ghost:
-          "border-transparent text-muted-foreground hover:bg-surface-hover hover:text-foreground dark:hover:bg-surface-hover",
+        active:
+          "bg-primary/10 text-primary border-primary/20 [a]:hover:bg-primary/15",
       },
     },
     defaultVariants: {
-      variant: "active",
+      variant: "default",
     },
   }
 )
 
 function Badge({
   className,
-  variant = "active",
+  variant = "default",
   asChild = false,
   ...props
 }: React.ComponentProps<"span"> &

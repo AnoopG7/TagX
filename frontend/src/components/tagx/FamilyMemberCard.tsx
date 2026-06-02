@@ -40,7 +40,7 @@ export function FamilyMemberCard({
               {avatar ? (
                 <img src={avatar} alt={name} className="w-10 h-10 rounded-lg object-cover" />
               ) : (
-                <div className="w-10 h-10 rounded-lg bg-surface-elevated flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
                   <User className="w-5 h-5 text-muted-foreground" />
                 </div>
               )}

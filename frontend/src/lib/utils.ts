@@ -1,17 +1,15 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-/**
- * Merge Tailwind CSS classes with clsx.
- * Used across all components — especially shadcn/ui primitives.
- */
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+export function cn(...inputs: (string | undefined | null | false | Record<string, boolean | undefined | null>)[]): string {
+  return inputs
+    .flatMap((i) => {
+      if (!i) return [];
+      if (typeof i === "string") return [i];
+      return Object.entries(i)
+        .filter(([, v]) => v)
+        .map(([k]) => k);
+    })
+    .join(" ");
 }
 
-/**
- * Format price to INR currency string.
- */
 export function formatPrice(price: number): string {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -21,17 +19,11 @@ export function formatPrice(price: number): string {
   }).format(price);
 }
 
-/**
- * Truncate text to a specified length.
- */
 export function truncate(text: string, length: number): string {
   if (text.length <= length) return text;
   return text.slice(0, length).trimEnd() + "…";
 }
 
-/**
- * Generate a URL-safe slug from a string.
- */
 export function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -40,9 +32,26 @@ export function slugify(text: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-/**
- * Delay utility for async operations.
- */
-export function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+export function formatRelativeTime(dateStr: string): string {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+
+  if (diffSec < 60) return "just now";
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) return `${diffMin}m ago`;
+  const diffHr = Math.floor(diffMin / 60);
+  if (diffHr < 24) return `${diffHr}h ago`;
+  const diffDay = Math.floor(diffHr / 24);
+  if (diffDay < 7) return `${diffDay}d ago`;
+  return date.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+}
+
+export function formatDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }

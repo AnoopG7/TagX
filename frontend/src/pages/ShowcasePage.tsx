@@ -26,7 +26,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 }
 
 function DemoArea({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={`rounded-xl bg-card p-6 sm:p-8 shadow-card ${className || ''}`}>{children}</div>;
+  return <div className={`rounded-xl bg-card p-6 sm:p-8 ring-1 ring-foreground/10 ${className || ''}`}>{children}</div>;
 }
 
 const mockEvents: TimelineEvent[] = [
@@ -52,14 +52,14 @@ export default function ShowcasePage() {
               {[
                 { name: 'Page BG', hsl: '222 47% 6%', swatch: 'bg-background' },
                 { name: 'Surface', hsl: '220 40% 11%', swatch: 'bg-card' },
-                { name: 'Elevated', hsl: '218 35% 13%', swatch: 'bg-surface-elevated' },
-                { name: 'Hover', hsl: '220 47% 16%', swatch: 'bg-surface-hover' },
+                { name: 'Muted', hsl: '220 14% 96%', swatch: 'bg-muted' },
+                { name: 'Muted/50', hsl: '220 14% 96%', swatch: 'bg-muted/50' },
                 { name: 'Primary', hsl: '166 100% 42%', swatch: 'bg-primary' },
                 { name: 'AI', hsl: '248 96% 68%', swatch: 'bg-ai' },
                 { name: 'Warning', hsl: '38 100% 64%', swatch: 'bg-warning' },
                 { name: 'Danger', hsl: '353 100% 68%', swatch: 'bg-destructive' },
               ].map((c) => (
-                <div key={c.name} className="p-3 rounded-lg bg-surface-hover border border-border">
+                <div key={c.name} className="p-3 rounded-lg bg-muted border">
                   <div className={`w-full h-14 rounded-md mb-2 shadow-sm ${c.swatch}`} />
                   <p className="text-sm font-medium text-foreground">{c.name}</p>
                   <p className="text-xs text-muted-foreground mt-0.5 font-mono">{c.hsl}</p>
@@ -108,7 +108,7 @@ export default function ShowcasePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <Card>
                 <CardHeader><CardTitle>Default</CardTitle><CardDescription>Standard card with shadow</CardDescription></CardHeader>
-                <CardContent><p className="text-sm text-muted-foreground">Built-in shadow-card, hover raises.</p></CardContent>
+                <CardContent><p className="text-sm text-muted-foreground">Ring-based card with hover lift.</p></CardContent>
                 <CardFooter><Button size="sm">Action</Button></CardFooter>
               </Card>
               <Card size="sm">

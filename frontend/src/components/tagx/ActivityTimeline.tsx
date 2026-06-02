@@ -50,7 +50,7 @@ export function ActivityTimeline({ events, className, maxItems }: ActivityTimeli
           >
             <div className="flex flex-col items-center">
               <div className={cn(
-                "w-7 h-7 rounded-full flex items-center justify-center bg-surface-elevated shrink-0",
+                "w-7 h-7 rounded-full flex items-center justify-center bg-muted shrink-0",
                 typeColors[event.type]
               )}>
                 <Icon className="w-3.5 h-3.5" />

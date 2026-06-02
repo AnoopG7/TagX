@@ -1,61 +1,227 @@
-import { Routes, Route } from 'react-router-dom'
-import { Toaster } from 'sonner'
-import { useEffect } from 'react'
-import { useAuthStore } from '@/stores/authStore'
-import ShowcasePage from '@/pages/ShowcasePage'
+import { Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { Toaster } from "sonner";
+import { useEffect } from "react";
+import { useAuthStore } from "@/stores/authStore";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
+import { ProtectedRoute, GuestRoute } from "@/components/common/ProtectedRoute";
 
-function Placeholder({ name }: { name: string }) {
+import ShowcasePage from "@/pages/ShowcasePage";
+import HomePage from "@/pages/HomePage";
+import AboutPage from "@/pages/AboutPage";
+import ContactPage from "@/pages/ContactPage";
+import LoginPage from "@/pages/LoginPage";
+import SignupPage from "@/pages/SignupPage";
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
+import ResetPasswordPage from "@/pages/ResetPasswordPage";
+import DashboardPage from "@/pages/DashboardPage";
+import DeviceDetailPage from "@/pages/DeviceDetailPage";
+import ProductsPage from "@/pages/ProductsPage";
+import ProductDetailPage from "@/pages/ProductDetailPage";
+import SettingsPage from "@/pages/SettingsPage";
+import FamilyPage from "@/pages/FamilyPage";
+import AlertsPage from "@/pages/AlertsPage";
+import NotFoundPage from "@/pages/NotFoundPage";
+
+const pageTransition = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -8 },
+  transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+};
+
+function PageTransition({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="font-display text-4xl font-bold text-foreground mb-2">
-          {name}
-        </h1>
-        <p className="text-muted-foreground">Coming in Phase 4</p>
-        <div className="mt-6 w-16 h-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
-          <div className="w-4 h-4 rounded-full bg-primary radar-ping" />
-        </div>
-      </div>
-    </div>
-  )
+    <AnimatePresence mode="wait">
+      <motion.div key={location.pathname} {...pageTransition}>
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+function AppLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <Navbar />
+      <PageTransition>{children}</PageTransition>
+      <Footer />
+    </>
+  );
+}
+
+function AuthLayout({ children }: { children: React.ReactNode }) {
+  return <PageTransition>{children}</PageTransition>;
 }
 
 export default function App() {
-  const hydrate = useAuthStore((s) => s.hydrate)
+  const hydrate = useAuthStore((s) => s.hydrate);
 
   useEffect(() => {
-    hydrate()
-  }, [hydrate])
+    hydrate();
+  }, [hydrate]);
 
   return (
     <>
       <Routes>
         <Route path="/showcase" element={<ShowcasePage />} />
-        <Route path="/" element={<Placeholder name="Home" />} />
-        <Route path="/products" element={<Placeholder name="Products" />} />
-        <Route path="/products/:slug" element={<Placeholder name="Product Detail" />} />
-        <Route path="/cart" element={<Placeholder name="Cart" />} />
-        <Route path="/checkout" element={<Placeholder name="Checkout" />} />
-        <Route path="/login" element={<Placeholder name="Login" />} />
-        <Route path="/signup" element={<Placeholder name="Sign Up" />} />
-        <Route path="/forgot-password" element={<Placeholder name="Forgot Password" />} />
-        <Route path="/dashboard" element={<Placeholder name="Dashboard" />} />
-        <Route path="/about" element={<Placeholder name="About" />} />
-        <Route path="/contact" element={<Placeholder name="Contact" />} />
-        <Route path="*" element={<Placeholder name="404 — Lost Signal" />} />
+
+        <Route
+          path="/login"
+          element={
+            <AuthLayout>
+              <GuestRoute>
+                <LoginPage />
+              </GuestRoute>
+            </AuthLayout>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <AuthLayout>
+              <GuestRoute>
+                <SignupPage />
+              </GuestRoute>
+            </AuthLayout>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <AuthLayout>
+              <GuestRoute>
+                <ForgotPasswordPage />
+              </GuestRoute>
+            </AuthLayout>
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <AuthLayout>
+              <GuestRoute>
+                <ResetPasswordPage />
+              </GuestRoute>
+            </AuthLayout>
+          }
+        />
+
+        <Route
+          path="/"
+          element={
+            <AppLayout>
+              <HomePage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <AppLayout>
+              <ProductsPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/products/:slug"
+          element={
+            <AppLayout>
+              <ProductDetailPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <AppLayout>
+              <AboutPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <AppLayout>
+              <ContactPage />
+            </AppLayout>
+          }
+        />
+
+        <Route
+          path="/dashboard"
+          element={
+            <AppLayout>
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/devices/:id"
+          element={
+            <AppLayout>
+              <ProtectedRoute>
+                <DeviceDetailPage />
+              </ProtectedRoute>
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <AppLayout>
+              <ProtectedRoute>
+                <SettingsPage />
+              </ProtectedRoute>
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/family"
+          element={
+            <AppLayout>
+              <ProtectedRoute>
+                <FamilyPage />
+              </ProtectedRoute>
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/alerts"
+          element={
+            <AppLayout>
+              <ProtectedRoute>
+                <AlertsPage />
+              </ProtectedRoute>
+            </AppLayout>
+          }
+        />
+
+        <Route
+          path="*"
+          element={
+            <AppLayout>
+              <NotFoundPage />
+            </AppLayout>
+          }
+        />
       </Routes>
 
       <Toaster
         position="bottom-right"
         toastOptions={{
           style: {
-            background: 'hsl(var(--card))',
-            border: '1px solid hsl(var(--border))',
-            color: 'hsl(var(--foreground))',
-            fontFamily: 'General Sans, sans-serif',
+            background: "hsl(var(--card))",
+            border: "1px solid hsl(var(--border))",
+            color: "hsl(var(--foreground))",
+            fontFamily: "Geist Variable, sans-serif",
           },
         }}
       />
     </>
-  )
+  );
 }

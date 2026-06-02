@@ -47,7 +47,7 @@ export function DeviceHealthWidget({
               key={metric.key}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-3 rounded-lg bg-surface-elevated border border-border"
+              className="p-3 rounded-lg bg-muted border"
             >
               <div className="flex items-center gap-2 mb-2">
                 <Icon className="w-3.5 h-3.5 text-muted-foreground" />

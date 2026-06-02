@@ -16,6 +16,7 @@ export const PRODUCT_CATEGORIES = [
   { value: "vehicle", label: "Vehicle", icon: "🚗" },
   { value: "luggage", label: "Luggage", icon: "🧳" },
   { value: "kids", label: "Kids", icon: "👶" },
+  { value: "enterprise", label: "Enterprise", icon: "🏢" },
 ] as const;
 
 // ---- Order Statuses ----

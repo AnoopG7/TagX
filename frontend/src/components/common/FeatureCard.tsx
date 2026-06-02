@@ -23,7 +23,7 @@ export function FeatureCard({
     >
       <div
         className={cn(
-          "group relative p-6 rounded-xl bg-surface border border-border transition-all duration-200",
+          "group relative p-6 rounded-xl bg-card border transition-all duration-200",
           accent === "cyan"
             ? "hover:border-primary/30 hover:shadow-glow-primary"
             : "hover:border-warning/30 hover:shadow-glow-warning"

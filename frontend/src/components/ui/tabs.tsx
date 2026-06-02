@@ -2,7 +2,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Tabs as TabsPrimitive } from "radix-ui"
 
-import { cn } from "#lib/utils.ts"
+import { cn } from "@/lib/utils"
 
 function Tabs({
   className,
@@ -27,7 +27,7 @@ const tabsListVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-surface-hover",
+        default: "bg-muted",
         line: "gap-1.5 bg-transparent",
       },
     },
