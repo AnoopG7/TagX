@@ -1,18 +1,27 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-const requiredEnvVars = [
-  "MONGO_URI",
-  "JWT_SECRET",
-  "JWT_REFRESH_SECRET",
-] as const;
+const requiredEnvVars = ["MONGO_URI", "JWT_SECRET", "JWT_REFRESH_SECRET"] as const;
 
-// Validate required env vars exist
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
     console.warn(`⚠️  Warning: Missing env variable ${envVar}`);
   }
 }
+
+const parseOrigins = (val: string | undefined): (string | RegExp)[] => {
+  if (!val) return ["http://localhost:5173"];
+  return val
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((s) => {
+      if (s.startsWith("/") && s.endsWith("/")) {
+        return new RegExp(s.slice(1, -1));
+      }
+      return s;
+    });
+};
 
 export const env = {
   PORT: parseInt(process.env.PORT || "5000", 10),
@@ -25,6 +34,9 @@ export const env = {
     process.env.JWT_REFRESH_SECRET || "dev-jwt-refresh-secret-change-me",
   JWT_EXPIRE: process.env.JWT_EXPIRE || "15m",
   JWT_REFRESH_EXPIRE: process.env.JWT_REFRESH_EXPIRE || "7d",
+
+  // CORS — comma-separated origins, supports /regex/
+  CORS_ORIGINS: parseOrigins(process.env.CORS_ORIGINS || process.env.CLIENT_URL),
 
   // Groq AI
   GROQ_API_KEY: process.env.GROQ_API_KEY || "",
@@ -43,3 +55,5 @@ export const env = {
   // Frontend
   CLIENT_URL: process.env.CLIENT_URL || "http://localhost:5173",
 } as const;
+
+export type Env = typeof env;

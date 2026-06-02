@@ -1,18 +1,14 @@
 import type { Request, Response, NextFunction } from "express";
+import mongoose from "mongoose";
 import { ApiError } from "../utils/ApiError.js";
 import { env } from "../config/env.js";
 
-/**
- * Global error handling middleware.
- * Catches all errors (ApiError + unhandled) and returns a structured JSON response.
- */
 export const errorMiddleware = (
-  err: Error | ApiError,
+  err: Error,
   _req: Request,
   res: Response,
   _next: NextFunction
 ): void => {
-  // Default to 500
   let statusCode = 500;
   let message = "Internal Server Error";
   let errors: Record<string, string> = {};
@@ -21,27 +17,35 @@ export const errorMiddleware = (
     statusCode = err.statusCode;
     message = err.message;
     errors = err.errors;
-  } else if (err.name === "ValidationError") {
-    // Mongoose validation error
+  } else if (err.name === "ValidationError" && err instanceof mongoose.Error.ValidationError) {
     statusCode = 400;
     message = "Validation Error";
-  } else if (err.name === "CastError") {
-    // Mongoose bad ObjectId
+    errors = Object.fromEntries(
+      Object.entries(err.errors).map(([key, val]) => [key, val.message])
+    );
+  } else if (err.name === "CastError" && err instanceof mongoose.Error.CastError) {
     statusCode = 400;
-    message = "Invalid ID format";
-  } else if ((err as NodeJS.ErrnoException).code === "11000") {
-    // Mongoose duplicate key
+    message = `Invalid ${err.path}: ${err.value}`;
+  } else if (err.message?.includes("E11000") || (err as unknown as Record<string, unknown>).code === 11000) {
     statusCode = 409;
-    message = "Duplicate entry";
+    message = "Duplicate entry. This value already exists.";
+    const keyValue = (err as unknown as Record<string, unknown>).keyValue as Record<string, string> | undefined;
+    if (keyValue) {
+      errors = Object.fromEntries(
+        Object.entries(keyValue).map(([key]) => [key, `${key} already exists`])
+      );
+    }
   } else if (err.name === "JsonWebTokenError") {
     statusCode = 401;
-    message = "Invalid token";
+    message = "Invalid or malformed token";
   } else if (err.name === "TokenExpiredError") {
     statusCode = 401;
-    message = "Token expired";
+    message = "Token has expired";
+  } else if (err.name === "SyntaxError" && "body" in err) {
+    statusCode = 400;
+    message = "Invalid JSON in request body";
   }
 
-  // Log in development
   if (env.NODE_ENV === "development") {
     console.error("❌ Error:", err);
   }

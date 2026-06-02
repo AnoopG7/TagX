@@ -1,13 +1,14 @@
 import { Router } from "express";
+import authRoutes from "./auth.routes.js";
+import productRoutes from "./product.routes.js";
+import deviceRoutes from "./device.routes.js";
+import notificationRoutes from "./notification.routes.js";
+import alertRoutes from "./alert.routes.js";
+import insightRoutes from "./insight.routes.js";
+import familyRoutes from "./family.routes.js";
 
 const router = Router();
 
-/**
- * API Route Aggregator
- * All feature routes will be mounted here as they're built in Phase 3.
- */
-
-// Health check
 router.get("/health", (_req, res) => {
   res.json({
     success: true,
@@ -16,13 +17,12 @@ router.get("/health", (_req, res) => {
   });
 });
 
-// TODO: Phase 3 — Mount feature routes
-// router.use("/auth", authRoutes);
-// router.use("/products", productRoutes);
-// router.use("/cart", cartRoutes);
-// router.use("/orders", orderRoutes);
-// router.use("/reviews", reviewRoutes);
-// router.use("/tracking", trackingRoutes);
-// router.use("/ai", aiRoutes);
+router.use("/auth", authRoutes);
+router.use("/products", productRoutes);
+router.use("/devices", deviceRoutes);
+router.use("/notifications", notificationRoutes);
+router.use("/alerts", alertRoutes);
+router.use("/insights", insightRoutes);
+router.use("/family", familyRoutes);
 
 export default router;
