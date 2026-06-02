@@ -121,7 +121,7 @@ export function RouteHistoryMap({ history, className }: RouteHistoryMapProps) {
       prevLengthRef.current = 0;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history.length >= 2]); // only re-run when crossing the 2-point threshold
+  }, []);
 
   // Incrementally update the polyline and end marker when history grows
   useEffect(() => {

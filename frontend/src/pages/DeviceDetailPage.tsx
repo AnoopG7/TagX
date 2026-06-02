@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { ArrowLeft, HardDrive, Cpu, Package, Calendar } from "lucide-react";
+import { ArrowLeft, HardDrive, Cpu, Package, Calendar, Pencil, Check, Trash2, Crosshair } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrackingStatusBadge } from "@/components/tagx/TrackingStatusBadge";
@@ -15,6 +16,7 @@ import { DeviceHealthWidget } from "@/components/tagx/DeviceHealthWidget";
 import { ActivityTimeline } from "@/components/tagx/ActivityTimeline";
 import type { TimelineEvent } from "@/components/tagx/ActivityTimeline";
 import { LoadingState } from "@/components/shared/LoadingState";
+import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { PageLayout } from "@/components/shared/PageLayout";
 import { containerVariants, itemVariants } from "@/lib/animations";
@@ -49,6 +51,12 @@ export default function DeviceDetailPage() {
   const [eventPage, setEventPage] = useState(1);
   const [eventTotal, setEventTotal] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
+
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editName, setEditName] = useState("");
+  const editRef = useRef<HTMLInputElement>(null);
 
   const fetchEvents = useCallback(
     async (pageNum: number, append = false) => {
@@ -106,6 +114,51 @@ export default function DeviceDetailPage() {
     await fetchEvents(next, true);
   };
 
+  const handleStartEdit = () => {
+    setEditName(device!.name);
+    setEditing(true);
+    setTimeout(() => editRef.current?.focus(), 50);
+  };
+
+  const handleSaveName = async () => {
+    const trimmed = editName.trim();
+    if (!trimmed || trimmed === device!.name) {
+      setEditing(false);
+      return;
+    }
+    if (trimmed.length > 60) {
+      toast.error("Name cannot exceed 60 characters");
+      return;
+    }
+    try {
+      const { data } = await api.patch(`/devices/${id}`, { name: trimmed });
+      setDevice(data.data.device);
+      setEditing(false);
+      toast.success("Device renamed");
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message || "Failed to rename device";
+      toast.error(msg);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditing(false);
+    setEditName(device!.name);
+  };
+
+  const handleRemoveDevice = async () => {
+    setDeleting(true);
+    try {
+      await api.delete(`/devices/${id}`);
+      toast.success("Device removed");
+      setDeleteOpen(false);
+      navigate("/dashboard");
+    } catch {
+      toast.error("Failed to remove device");
+      setDeleting(false);
+    }
+  };
+
   if (loading) {
     return (
       <PageLayout>
@@ -151,7 +204,38 @@ export default function DeviceDetailPage() {
           <PageHeader
             title={
               <div className="flex items-center gap-3 flex-wrap">
-                <span>{device.name}</span>
+                {editing ? (
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <Input
+                      ref={editRef}
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleSaveName();
+                        if (e.key === "Escape") handleCancelEdit();
+                      }}
+                      className="h-8 w-48"
+                    />
+                    <Button size="icon-xs" variant="ghost" onClick={handleSaveName}>
+                      <Check className="w-4 h-4 text-primary" />
+                    </Button>
+                  </div>
+                ) : (
+                  <span className="text-xl sm:text-2xl">{device.name}</span>
+                )}
+                <div className="flex items-center gap-1">
+                  {!editing && (
+                    <Button size="icon-xs" variant="ghost" onClick={handleStartEdit}>
+                      <Pencil className="w-3.5 h-3.5 text-muted-foreground" />
+                    </Button>
+                  )}
+                  <Button size="icon-xs" variant="ghost" className="text-muted-foreground hover:text-primary" onClick={() => navigate(`/track/${id}`)}>
+                    <Crosshair className="w-3.5 h-3.5" />
+                  </Button>
+                  <Button size="icon-xs" variant="ghost" className="text-muted-foreground hover:text-destructive" onClick={() => setDeleteOpen(true)}>
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </Button>
+                </div>
                 <TrackingStatusBadge status={device.status} />
                 <Badge variant="outline" className="capitalize">
                   {device.type}
@@ -288,6 +372,17 @@ export default function DeviceDetailPage() {
           </div>
         </div>
       </motion.div>
+
+      <ConfirmDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        title="Remove Device"
+        description={`Are you sure you want to remove "${device.name}" from your network? This action cannot be undone.`}
+        confirmLabel="Remove"
+        variant="destructive"
+        loading={deleting}
+        onConfirm={handleRemoveDevice}
+      />
     </PageLayout>
   );
 }

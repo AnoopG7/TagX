@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -20,43 +20,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { LiveTrackingMap } from "@/components/maps/LiveTrackingMap";
 import { RouteHistoryMap } from "@/components/maps/RouteHistoryMap";
 import { useDeviceSimulation } from "@/hooks/useDeviceSimulation";
 import { cn } from "@/lib/utils";
-
-// ──────────────────────────────────────
-// Simulated device metadata
-// ──────────────────────────────────────
-const MOCK_DEVICES: Record<
-  string,
-  { name: string; type: string; battery: number; signal: number }
-> = {
-  demo: {
-    name: "Keys — TagX Pro",
-    type: "tag",
-    battery: 87,
-    signal: 92,
-  },
-  pet: {
-    name: "Buddy — TagX Pet",
-    type: "pet",
-    battery: 64,
-    signal: 78,
-  },
-  vehicle: {
-    name: "Honda City — TagX Vehicle",
-    type: "vehicle",
-    battery: 95,
-    signal: 85,
-  },
-};
+import api from "@/lib/api";
+import type { TrackingDevice } from "@/types/device.types";
 
 type TabMode = "live" | "route";
 
-// ──────────────────────────────────────
-// Helpers
-// ──────────────────────────────────────
+const DEFAULT_LAT = 19.0596;
+const DEFAULT_LNG = 72.8656;
 
 function formatDuration(ms: number): string {
   const totalSec = Math.floor(ms / 1000);
@@ -70,17 +45,39 @@ function formatDistance(meters: number): string {
   return `${(meters / 1000).toFixed(2)} km`;
 }
 
-// ──────────────────────────────────────
-// Component
-// ──────────────────────────────────────
-
 export default function TrackingPage() {
-  const { deviceId = "demo" } = useParams<{ deviceId: string }>();
+  const { deviceId } = useParams<{ deviceId: string }>();
   const navigate = useNavigate();
+
+  const [device, setDevice] = useState<TrackingDevice | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
   const [activeTab, setActiveTab] = useState<TabMode>("live");
   const [followMarker, setFollowMarker] = useState(true);
 
-  const device = MOCK_DEVICES[deviceId] ?? MOCK_DEVICES["demo"];
+  useEffect(() => {
+    if (!deviceId) {
+      setError(true);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await api.get(`/devices/${deviceId}`);
+        if (cancelled) return;
+        setDevice(data.data.device);
+      } catch {
+        if (!cancelled) setError(true);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [deviceId]);
+
+  const startLat = device?.location?.lat ?? DEFAULT_LAT;
+  const startLng = device?.location?.lng ?? DEFAULT_LNG;
 
   const {
     currentLocation,
@@ -92,22 +89,56 @@ export default function TrackingPage() {
     stopTracking,
     resetHistory,
   } = useDeviceSimulation({
-    // Mumbai — Bandra-Kurla Complex area
-    startLat: 19.0596,
-    startLng: 72.8656,
+    startLat,
+    startLng,
     intervalMs: 3000,
     baseSpeed: 1.4,
   });
 
-  // Last 25 points for the live trail
   const liveTrail = useMemo(
     () => locationHistory.slice(-25),
     [locationHistory],
   );
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background pt-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <Skeleton className="h-8 w-48 rounded-lg" />
+          <Skeleton className="h-4 w-72 rounded-lg" />
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div className="lg:col-span-3">
+              <Skeleton className="h-[60vh] w-full rounded-xl" />
+            </div>
+            <div className="space-y-4">
+              <Skeleton className="h-40 w-full rounded-xl" />
+              <Skeleton className="h-28 w-full rounded-xl" />
+              <Skeleton className="h-40 w-full rounded-xl" />
+              <Skeleton className="h-44 w-full rounded-xl" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !device) {
+    return (
+      <div className="min-h-screen bg-background pt-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center justify-center py-24 gap-4">
+            <p className="text-muted-foreground">Device not found</p>
+            <Button variant="secondary" onClick={() => navigate("/dashboard")}>
+              Back to Dashboard
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
-      {/* ── Header ── */}
       <section className="pt-32 pb-4 border-b border-border bg-card/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -149,7 +180,6 @@ export default function TrackingPage() {
                 )}
               </div>
 
-              {/* Tab Switcher */}
               <div className="flex items-center gap-1 p-1 rounded-lg bg-surface border border-border">
                 {(["live", "route"] as TabMode[]).map((tab) => (
                   <button
@@ -181,10 +211,8 @@ export default function TrackingPage() {
         </div>
       </section>
 
-      {/* ── Main Content ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Map — 3/4 width */}
           <motion.div
             className="lg:col-span-3"
             initial={{ opacity: 0, scale: 0.98 }}
@@ -226,7 +254,6 @@ export default function TrackingPage() {
             </AnimatePresence>
           </motion.div>
 
-          {/* Sidebar — 1/4 width */}
           <motion.div
             className="space-y-4"
             initial={{ opacity: 0, x: 20 }}
@@ -237,24 +264,22 @@ export default function TrackingPage() {
               ease: [0.16, 1, 0.3, 1],
             }}
           >
-            {/* Device Info Card */}
             <Card className="bg-card border-border">
               <CardContent className="p-4 space-y-4">
                 <h3 className="text-sm font-display font-semibold text-foreground">
                   Device Status
                 </h3>
-
                 <div className="space-y-3">
                   <InfoRow
                     icon={Battery}
                     label="Battery"
-                    value={`${device.battery}%`}
-                    accent={device.battery > 50 ? "green" : "amber"}
+                    value={`${device.batteryLevel}%`}
+                    accent={device.batteryLevel > 50 ? "green" : "amber"}
                   />
                   <InfoRow
                     icon={Signal}
                     label="Signal"
-                    value={`${device.signal}%`}
+                    value={`${device.signalStrength}%`}
                     accent="green"
                   />
                   <InfoRow
@@ -271,7 +296,6 @@ export default function TrackingPage() {
               </CardContent>
             </Card>
 
-            {/* Coordinates Card */}
             <Card className="bg-card border-border">
               <CardContent className="p-4 space-y-3">
                 <h3 className="text-sm font-display font-semibold text-foreground">
@@ -294,7 +318,6 @@ export default function TrackingPage() {
               </CardContent>
             </Card>
 
-            {/* Stats Card */}
             <Card className="bg-card border-border">
               <CardContent className="p-4 space-y-3">
                 <h3 className="text-sm font-display font-semibold text-foreground">
@@ -329,13 +352,11 @@ export default function TrackingPage() {
               </CardContent>
             </Card>
 
-            {/* Controls Card */}
             <Card className="bg-card border-border">
               <CardContent className="p-4 space-y-3">
                 <h3 className="text-sm font-display font-semibold text-foreground">
                   Simulation Controls
                 </h3>
-
                 <div className="flex flex-col gap-2">
                   {!isTracking ? (
                     <Button
@@ -355,7 +376,6 @@ export default function TrackingPage() {
                       Stop Tracking
                     </Button>
                   )}
-
                   <Button
                     onClick={resetHistory}
                     variant="outline"
@@ -365,7 +385,6 @@ export default function TrackingPage() {
                     Reset
                   </Button>
                 </div>
-
                 {activeTab === "live" && (
                   <label className="flex items-center gap-2 cursor-pointer mt-2">
                     <input
@@ -387,10 +406,6 @@ export default function TrackingPage() {
     </div>
   );
 }
-
-// ──────────────────────────────────────
-// Sub-components
-// ──────────────────────────────────────
 
 function InfoRow({
   icon: Icon,

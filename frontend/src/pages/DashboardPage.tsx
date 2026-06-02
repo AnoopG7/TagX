@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { Wifi, Plus, Scan, Bell, Users } from "lucide-react";
+import { Wifi, Plus, Scan, Bell, Users, Crosshair } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MetricCard } from "@/components/dashboard/MetricCard";
@@ -19,7 +19,7 @@ import { containerVariants, itemVariants } from "@/lib/animations";
 import type { TrackingDevice, TrackingEvent } from "@/types/device.types";
 import type { TimelineEvent } from "@/components/tagx/ActivityTimeline";
 
-function quickActions(navigate: ReturnType<typeof useNavigate>, setAddOpen: (v: boolean) => void) {
+function quickActions(navigate: ReturnType<typeof useNavigate>, setAddOpen: (v: boolean) => void, devices: TrackingDevice[]) {
   return [
     {
       label: "Scan for Trackers",
@@ -45,6 +45,16 @@ function quickActions(navigate: ReturnType<typeof useNavigate>, setAddOpen: (v: 
       variant: "secondary" as const,
       onClick: () => navigate("/alerts"),
     },
+    ...(devices.length > 0
+      ? [
+          {
+            label: "Live Tracking",
+            icon: Crosshair,
+            variant: "secondary" as const,
+            onClick: () => navigate(`/track/${devices[0]._id}`),
+          },
+        ]
+      : []),
   ];
 }
 
@@ -156,7 +166,7 @@ export default function DashboardPage() {
         <motion.div variants={itemVariants}>
           <Card>
             <CardContent className="p-5 flex flex-wrap gap-3">
-              {quickActions(navigate, setAddOpen).map((action) => (
+              {quickActions(navigate, setAddOpen, devices).map((action) => (
                 <Button key={action.label} variant={action.variant} onClick={action.onClick} className="gap-2">
                   <action.icon className="w-4 h-4" />
                   {action.label}
@@ -194,6 +204,7 @@ export default function DashboardPage() {
                     location={device.location?.address}
                     accuracy={device.location?.accuracy ? `${device.location.accuracy}m` : undefined}
                     temperature={device.temperature}
+                    onTrack={() => navigate(`/track/${device._id}`)}
                   />
                 </motion.div>
               ))}

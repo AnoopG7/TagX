@@ -43,7 +43,7 @@ function validate(form: FormData): FormErrors {
 
 function generateSerial(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let result = "TAGX-";
+  let result = "TAGX";
   for (let i = 0; i < 8; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
   return result;
 }
@@ -130,7 +130,7 @@ export function AddDeviceDialog({ open, onOpenChange, onSuccess }: AddDeviceDial
               value={form.serialNumber}
               onChange={(e) => { setForm({ ...form, serialNumber: e.target.value }); setErrors({ ...errors, serialNumber: undefined }); }}
               className={errors.serialNumber ? "border-destructive font-mono text-xs" : "font-mono text-xs"}
-              placeholder="TAGX-XXXXXXXX"
+              placeholder="TAGX"
             />
             {errors.serialNumber && <p className="text-xs text-destructive">{errors.serialNumber}</p>}
           </div>

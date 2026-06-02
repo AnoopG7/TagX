@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { MapPin, MoreVertical, Bluetooth, Wifi, RefreshCw } from 'lucide-react';
+import { MapPin, Crosshair, Bluetooth, Wifi, RefreshCw } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { BatteryIndicator } from './BatteryIndicator';
 import { SignalStrengthIndicator } from './SignalStrengthIndicator';
@@ -17,7 +17,7 @@ export interface DeviceCardProps {
   accuracy?: string;
   temperature?: number;
   className?: string;
-  onAction?: () => void;
+  onTrack?: () => void;
 }
 
 const typeIcons = {
@@ -38,6 +38,7 @@ export function DeviceCard({
   location,
   accuracy,
   className,
+  onTrack,
 }: DeviceCardProps) {
   const Icon = typeIcons[type];
 
@@ -59,9 +60,16 @@ export function DeviceCard({
                 <p className="text-xs text-muted-foreground capitalize">{type}</p>
               </div>
             </div>
-            <button className="w-8 h-8 rounded-lg hover:bg-muted flex items-center justify-center transition-colors duration-200 opacity-0 group-hover:opacity-100">
-              <MoreVertical className="w-4 h-4 text-muted-foreground" />
-            </button>
+            {onTrack && (
+              <div
+                role="button"
+                onClick={(e) => { e.stopPropagation(); onTrack(); }}
+                className="w-8 h-8 rounded-lg hover:bg-primary/10 flex items-center justify-center transition-colors duration-200 opacity-0 group-hover:opacity-100 cursor-pointer"
+                title="Live Track"
+              >
+                <Crosshair className="w-4 h-4 text-primary" />
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-3 mb-4">
