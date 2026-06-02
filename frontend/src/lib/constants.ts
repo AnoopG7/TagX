@@ -40,6 +40,7 @@ export const HERO_STATS = [
 export const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Products" },
+  { href: "/track/demo", label: "Track" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ] as const;

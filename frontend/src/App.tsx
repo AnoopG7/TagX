@@ -22,6 +22,7 @@ import ProductDetailPage from "@/pages/ProductDetailPage";
 import SettingsPage from "@/pages/SettingsPage";
 import FamilyPage from "@/pages/FamilyPage";
 import AlertsPage from "@/pages/AlertsPage";
+import TrackingPage from "@/pages/TrackingPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 
 const pageTransition = {
@@ -186,6 +187,16 @@ export default function App() {
             <AppLayout>
               <ProtectedRoute>
                 <FamilyPage />
+              </ProtectedRoute>
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/track/:deviceId"
+          element={
+            <AppLayout>
+              <ProtectedRoute>
+                <TrackingPage />
               </ProtectedRoute>
             </AppLayout>
           }
