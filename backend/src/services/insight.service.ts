@@ -1,6 +1,6 @@
 import { AIInsight } from "../models/ai-insight.model.js";
 import { ApiError } from "../utils/ApiError.js";
-import type { InsightCategory, InsightFeedback } from "../models/ai-insight.model.js";
+import type { InsightCategory, InsightFeedback, InsightType } from "../models/ai-insight.model.js";
 
 export async function listInsights(
   userId: string,
@@ -34,6 +34,31 @@ export async function listInsights(
     insights,
     pagination: { page, limit, total, pages: Math.ceil(total / limit) },
   };
+}
+
+export async function createInsight(
+  userId: string,
+  data: {
+    type: InsightType;
+    category: InsightCategory;
+    title: string;
+    description: string;
+    confidence?: number;
+    actionable?: boolean;
+    metadata?: Record<string, unknown>;
+  }
+) {
+  const insight = await AIInsight.create({
+    user: userId,
+    type: data.type,
+    category: data.category,
+    title: data.title,
+    description: data.description,
+    confidence: data.confidence,
+    actionable: data.actionable ?? false,
+    metadata: data.metadata ?? {},
+  });
+  return insight;
 }
 
 export async function dismissInsight(userId: string, insightId: string) {

@@ -7,6 +7,7 @@ const router = Router();
 router.use(authMiddleware);
 
 router.get("/", insightController.listInsights);
+router.post("/", insightController.createInsight);
 router.patch("/:id/dismiss", insightController.dismissInsight);
 router.patch("/:id/feedback", insightController.submitFeedback);
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { Wifi, Plus, Scan, Bell, Users, Crosshair } from "lucide-react";
+import { Wifi, Plus, Scan, Bell, Sparkles, Shield, Users, Crosshair } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MetricCard } from "@/components/dashboard/MetricCard";
@@ -40,8 +40,20 @@ function quickActions(navigate: ReturnType<typeof useNavigate>, setAddOpen: (v: 
       onClick: () => navigate("/family"),
     },
     {
-      label: "View Alerts",
+      label: "View Insights",
+      icon: Sparkles,
+      variant: "secondary" as const,
+      onClick: () => navigate("/insights"),
+    },
+    {
+      label: "View Notifications",
       icon: Bell,
+      variant: "secondary" as const,
+      onClick: () => navigate("/notifications"),
+    },
+    {
+      label: "View Alerts",
+      icon: Shield,
       variant: "secondary" as const,
       onClick: () => navigate("/alerts"),
     },

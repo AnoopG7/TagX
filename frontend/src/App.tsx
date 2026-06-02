@@ -22,6 +22,8 @@ import ProductDetailPage from "@/pages/ProductDetailPage";
 import SettingsPage from "@/pages/SettingsPage";
 import FamilyPage from "@/pages/FamilyPage";
 import AlertsPage from "@/pages/AlertsPage";
+import InsightsPage from "@/pages/InsightsPage";
+import NotificationsPage from "@/pages/NotificationsPage";
 import TrackingPage from "@/pages/TrackingPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 
@@ -197,6 +199,26 @@ export default function App() {
             <AppLayout>
               <ProtectedRoute>
                 <TrackingPage />
+              </ProtectedRoute>
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/insights"
+          element={
+            <AppLayout>
+              <ProtectedRoute>
+                <InsightsPage />
+              </ProtectedRoute>
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <AppLayout>
+              <ProtectedRoute>
+                <NotificationsPage />
               </ProtectedRoute>
             </AppLayout>
           }

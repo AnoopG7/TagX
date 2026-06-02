@@ -6,6 +6,7 @@ import notificationRoutes from "./notification.routes.js";
 import alertRoutes from "./alert.routes.js";
 import insightRoutes from "./insight.routes.js";
 import familyRoutes from "./family.routes.js";
+import aiRoutes from "./ai.routes.js";
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use("/notifications", notificationRoutes);
 router.use("/alerts", alertRoutes);
 router.use("/insights", insightRoutes);
 router.use("/family", familyRoutes);
+router.use("/ai", aiRoutes);
 
 export default router;

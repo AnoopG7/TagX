@@ -7,6 +7,7 @@ const router = Router();
 router.use(authMiddleware);
 
 router.get("/", alertController.listAlerts);
+router.post("/", alertController.createAlert);
 router.patch("/:id/resolve", alertController.resolveAlert);
 
 export default router;

@@ -1,7 +1,8 @@
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   ShieldCheck, Radar, Monitor, Brain, Shield, Users,
-  Battery, Bell, Check, X, Map, History, Search,
+  Battery, Bell, Sparkles, LayoutDashboard, Check, X, Map, History, Search,
 } from "lucide-react";
 import { HeroBackground } from "@/components/common/HeroBackground";
 import { Button } from "@/components/ui/button";
@@ -83,7 +84,20 @@ export default function HomePage() {
             >
               TagX is the smart tracker that works across every phone, learns your habits, and keeps you protected — not just located.
             </motion.p>
-          </motion.div>
+
+            <motion.div variants={fadeUp} className="mt-8 flex items-center justify-center gap-4">
+              <Link to="/dashboard">
+                <Button size="lg" className="gap-2 text-base px-8">
+                  <LayoutDashboard className="w-5 h-5" />
+                  Go to Dashboard
+                </Button>
+              </Link>
+              <Link to="/products">
+                <Button variant="outline" size="lg" className="gap-2 text-base px-8">
+                  See Products
+                </Button>
+              </Link>
+            </motion.div>
 
           {/* Stats */}
           <motion.div
@@ -102,6 +116,7 @@ export default function HomePage() {
               <div className="text-3xl md:text-4xl font-display font-bold text-foreground">15.35%</div>
               <p className="text-sm text-muted-foreground mt-1">Global CAGR of tracker market 2025–32</p>
             </div>
+          </motion.div>
           </motion.div>
         </Container>
       </section>
@@ -202,6 +217,51 @@ export default function HomePage() {
                 <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
               </div>
             ))}
+          </div>
+        </Container>
+      </section>
+
+      {/* AI Dashboard */}
+      <section className="py-20 md:py-32">
+        <Container>
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <p className="text-sm font-medium text-primary tracking-widest uppercase mb-3">AI Dashboard</p>
+            <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight">
+              Intelligence at your fingertips
+            </h2>
+            <p className="mt-4 text-muted-foreground text-lg">
+              Every tracked device feeds into a live dashboard that learns, alerts, and protects — automatically.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-6 rounded-xl bg-card border group hover:border-primary/30 transition-all duration-200">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-all duration-200">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <h3 className="font-display font-semibold text-lg text-foreground mb-1">AI Insights</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                AI-generated observations about device usage patterns, location trends, and predictive suggestions — like knowing when you're about to leave something behind.
+              </p>
+            </div>
+            <div className="p-6 rounded-xl bg-card border group hover:border-primary/30 transition-all duration-200">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-all duration-200">
+                <Bell className="w-5 h-5" />
+              </div>
+              <h3 className="font-display font-semibold text-lg text-foreground mb-1">Smart Notifications</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Real-time notifications about device activity, security events, and helpful reminders — delivered to your dashboard so you never miss what matters.
+              </p>
+            </div>
+            <div className="p-6 rounded-xl bg-card border group hover:border-primary/30 transition-all duration-200">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-all duration-200">
+                <Shield className="w-5 h-5" />
+              </div>
+              <h3 className="font-display font-semibold text-lg text-foreground mb-1">Privacy Alerts</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Instant warnings about unknown tracker detections, unusual device behavior, and security concerns — anti-stalking built in from day one.
+              </p>
+            </div>
           </div>
         </Container>
       </section>

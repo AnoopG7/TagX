@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  LayoutDashboard, Settings, Users, Bell, Menu, X, LogOut,
+  LayoutDashboard, Settings, Users, Bell, Sparkles, Shield, Menu, X, LogOut,
 } from "lucide-react";
 import { Logo } from "@/components/common/Logo";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
@@ -55,7 +55,45 @@ export function Navbar() {
             <Logo />
 
             <div className="hidden md:flex items-center gap-8">
-              {NAV_LINKS.map((link) => (
+              <Link
+                to="/"
+                className={cn(
+                  "text-sm font-medium transition-colors duration-200 relative",
+                  location.pathname === "/"
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                Home
+                {location.pathname === "/" && (
+                  <motion.div
+                    layoutId="nav-indicator"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"
+                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                )}
+              </Link>
+              {isAuthenticated && (
+                <Link
+                  to="/dashboard"
+                  className={cn(
+                    "text-sm font-medium transition-colors duration-200 relative",
+                    location.pathname === "/dashboard"
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  Dashboard
+                  {location.pathname === "/dashboard" && (
+                    <motion.div
+                      layoutId="nav-indicator"
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"
+                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                  )}
+                </Link>
+              )}
+              {NAV_LINKS.filter((l) => l.href !== "/").map((link) => (
                 <Link
                   key={link.href}
                   to={link.href}
@@ -113,8 +151,18 @@ export function Navbar() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
+                      <Link to="/insights" className="cursor-pointer">
+                        <Sparkles className="mr-2 size-4" /> Insights
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/notifications" className="cursor-pointer">
+                        <Bell className="mr-2 size-4" /> Notifications
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
                       <Link to="/alerts" className="cursor-pointer">
-                        <Bell className="mr-2 size-4" /> Alerts
+                        <Shield className="mr-2 size-4" /> Alerts
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>

@@ -7,6 +7,7 @@ const router = Router();
 router.use(authMiddleware);
 
 router.get("/", notificationController.listNotifications);
+router.post("/", notificationController.createNotification);
 router.patch("/:id/read", notificationController.markRead);
 router.patch("/read-all", notificationController.markAllRead);
 

@@ -1,5 +1,6 @@
 import { PrivacyAlert } from "../models/privacy-alert.model.js";
 import { ApiError } from "../utils/ApiError.js";
+import type { AlertSeverity } from "../models/privacy-alert.model.js";
 
 export async function listAlerts(
   userId: string,
@@ -26,6 +27,31 @@ export async function listAlerts(
     alerts,
     pagination: { page, limit, total, pages: Math.ceil(total / limit) },
   };
+}
+
+export async function createAlert(
+  userId: string,
+  data: {
+    severity: AlertSeverity;
+    title: string;
+    description: string;
+    location?: string;
+    coordinates?: { lat: number; lng: number };
+    device?: string;
+    metadata?: Record<string, unknown>;
+  }
+) {
+  const alert = await PrivacyAlert.create({
+    user: userId,
+    severity: data.severity,
+    title: data.title,
+    description: data.description,
+    location: data.location,
+    coordinates: data.coordinates,
+    device: data.device,
+    metadata: data.metadata ?? {},
+  });
+  return alert;
 }
 
 export async function resolveAlert(userId: string, alertId: string) {

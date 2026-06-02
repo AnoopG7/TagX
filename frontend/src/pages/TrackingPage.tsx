@@ -15,6 +15,8 @@ import {
   Radio,
   Battery,
   Signal,
+  AlertTriangle,
+  Bot,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -24,6 +26,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { LiveTrackingMap } from "@/components/maps/LiveTrackingMap";
 import { RouteHistoryMap } from "@/components/maps/RouteHistoryMap";
 import { useDeviceSimulation } from "@/hooks/useDeviceSimulation";
+import { useAIFeatures } from "@/hooks/useAIFeatures";
 import { cn } from "@/lib/utils";
 import api from "@/lib/api";
 import type { TrackingDevice } from "@/types/device.types";
@@ -93,6 +96,17 @@ export default function TrackingPage() {
     startLng,
     intervalMs: 3000,
     baseSpeed: 1.4,
+  });
+
+  const {
+    feed: aiFeed,
+    simulateLost,
+    generatedCount: aiCount,
+  } = useAIFeatures({
+    deviceId: deviceId ?? "",
+    deviceName: device?.name ?? "Device",
+    locationHistory,
+    isTracking,
   });
 
   const liveTrail = useMemo(
@@ -352,6 +366,37 @@ export default function TrackingPage() {
               </CardContent>
             </Card>
 
+            {aiFeed.length > 0 && (
+              <Card className="bg-card border-border">
+                <CardContent className="p-4 space-y-2">
+                  <h3 className="text-sm font-display font-semibold text-foreground flex items-center gap-2">
+                    <Bot className="w-3.5 h-3.5 text-primary" />
+                    AI Feed
+                  </h3>
+                  <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                    {aiFeed.map((item) => (
+                      <div
+                        key={item.id}
+                        className="p-2 rounded-lg bg-surface border border-border text-xs space-y-0.5"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-foreground capitalize">
+                            {item.title}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">
+                            {item.source === "alert" ? "⚠️" : item.source === "notification" ? "🔔" : "🤖"}
+                          </span>
+                        </div>
+                        <p className="text-muted-foreground line-clamp-2">
+                          {item.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             <Card className="bg-card border-border">
               <CardContent className="p-4 space-y-3">
                 <h3 className="text-sm font-display font-semibold text-foreground">
@@ -385,6 +430,22 @@ export default function TrackingPage() {
                     Reset
                   </Button>
                 </div>
+                <div className="pt-2 border-t border-border">
+                  <Button
+                    onClick={simulateLost}
+                    variant="outline"
+                    className="w-full border-destructive/40 text-destructive hover:bg-destructive/10 font-medium gap-2"
+                  >
+                    <AlertTriangle className="w-4 h-4" />
+                    Mark as Lost
+                  </Button>
+                </div>
+                {aiCount > 0 && (
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground pt-1">
+                    <Bot className="w-3 h-3" />
+                    <span>{aiCount} AI items generated</span>
+                  </div>
+                )}
                 {activeTab === "live" && (
                   <label className="flex items-center gap-2 cursor-pointer mt-2">
                     <input
