@@ -103,6 +103,12 @@ export const changePassword = asyncHandler(async (req: AuthRequest, res: Respons
   res.json(ApiResponse.ok(null, "Password changed successfully"));
 });
 
+export const updateProfile = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const { name, phone, preferences } = req.body;
+  const user = await authService.updateProfile(req.user!.userId, { name, phone, preferences });
+  res.json(ApiResponse.ok({ user }, "Profile updated"));
+});
+
 export const getMe = asyncHandler(async (req: AuthRequest, res: Response) => {
   const user = await authService.getMe(req.user!.userId);
   res.json(ApiResponse.ok({ user }));

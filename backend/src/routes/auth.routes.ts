@@ -6,6 +6,7 @@ import {
   loginRules,
   forgotPasswordRules,
   resetPasswordRules,
+  updateProfileRules,
   changePasswordRules,
   sendOtpRules,
   verifyOtpRules,
@@ -23,5 +24,6 @@ router.post("/change-password", authMiddleware, changePasswordRules, authControl
 router.post("/send-otp", sendOtpRules, authController.sendOtp);
 router.post("/verify-otp", verifyOtpRules, authController.verifyOtp);
 router.get("/me", authMiddleware, authController.getMe);
+router.patch("/me", authMiddleware, updateProfileRules, authController.updateProfile);
 
 export default router;

@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageLayout, PageHeader } from "@/components/shared";
 import { useAuthStore } from "@/stores/authStore";
+import { useUIStore } from "@/stores/uiStore";
 import api from "@/lib/api";
 import { containerVariants, itemVariants } from "@/lib/animations";
 
@@ -31,8 +32,9 @@ export default function SettingsPage() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [savingPreferences, setSavingPreferences] = useState(false);
   const [changingPassword, setChangingPassword] = useState(false);
-
   if (!user) {
     return (
       <PageLayout>
@@ -45,16 +47,35 @@ export default function SettingsPage() {
     );
   }
 
-  const handleSaveProfile = () => {
-    updateUser({ name, phone });
-    toast.success("Profile updated");
+  const handleSaveProfile = async () => {
+    setSavingProfile(true);
+    try {
+      const { data: res } = await api.patch("/auth/me", { name, phone });
+      updateUser({ name: res.data.user.name, phone: res.data.user.phone });
+      useAuthStore.getState().fetchMe();
+      toast.success("Profile updated");
+    } catch {
+      toast.error("Failed to update profile");
+    } finally {
+      setSavingProfile(false);
+    }
   };
 
-  const handleSavePreferences = () => {
-    updateUser({
-      preferences: { theme, notifications, emailAlerts, smsAlerts, language, timezone, privacyScanEnabled },
-    });
-    toast.success("Preferences saved");
+  const handleSavePreferences = async () => {
+    setSavingPreferences(true);
+    try {
+      const preferencesData = { theme, notifications, emailAlerts, smsAlerts, language, timezone, privacyScanEnabled };
+      const { data: res } = await api.patch("/auth/me", { preferences: preferencesData });
+      updateUser({ preferences: res.data.user.preferences });
+      if (theme === "dark" || theme === "light") {
+        useUIStore.getState().setTheme(theme);
+      }
+      toast.success("Preferences saved");
+    } catch {
+      toast.error("Failed to save preferences");
+    } finally {
+      setSavingPreferences(false);
+    }
   };
 
   const handleChangePassword = async () => {
@@ -76,7 +97,7 @@ export default function SettingsPage() {
 
   return (
     <PageLayout>
-      <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
+      <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8">
         <motion.div variants={itemVariants}>
           <PageHeader title="Settings" description="Manage your profile and preferences" />
         </motion.div>
@@ -103,8 +124,8 @@ export default function SettingsPage() {
                 <Label htmlFor="phone">Phone</Label>
                 <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
               </div>
-              <Button onClick={handleSaveProfile} className="gap-2">
-                <Save className="w-4 h-4" />Save Changes
+              <Button onClick={handleSaveProfile} disabled={savingProfile} className="gap-2">
+                <Save className="w-4 h-4" />{savingProfile ? "Saving..." : "Save Changes"}
               </Button>
             </CardContent>
           </Card>
@@ -178,8 +199,8 @@ export default function SettingsPage() {
                   </Select>
                 </div>
               </div>
-              <Button onClick={handleSavePreferences} className="gap-2">
-                <Save className="w-4 h-4" />Save Preferences
+              <Button onClick={handleSavePreferences} disabled={savingPreferences} className="gap-2">
+                <Save className="w-4 h-4" />{savingPreferences ? "Saving..." : "Save Preferences"}
               </Button>
             </CardContent>
           </Card>

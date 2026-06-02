@@ -110,6 +110,51 @@ export const verifyOtpRules = [
   validateRequest as unknown as (req: Request, res: Response, next: NextFunction) => void,
 ];
 
+export const updateProfileRules = [
+  body("name")
+    .optional()
+    .trim()
+    .isLength({ min: 2, max: 50 }).withMessage("Name must be 2-50 characters"),
+
+  body("phone")
+    .optional()
+    .trim(),
+
+  body("preferences")
+    .optional()
+    .isObject().withMessage("Preferences must be an object"),
+
+  body("preferences.theme")
+    .optional()
+    .isIn(["dark", "light", "system"]).withMessage("Theme must be dark, light, or system"),
+
+  body("preferences.notifications")
+    .optional()
+    .isBoolean().withMessage("Notifications must be a boolean"),
+
+  body("preferences.emailAlerts")
+    .optional()
+    .isBoolean().withMessage("Email alerts must be a boolean"),
+
+  body("preferences.smsAlerts")
+    .optional()
+    .isBoolean().withMessage("SMS alerts must be a boolean"),
+
+  body("preferences.language")
+    .optional()
+    .isString().withMessage("Language must be a string"),
+
+  body("preferences.timezone")
+    .optional()
+    .isString().withMessage("Timezone must be a string"),
+
+  body("preferences.privacyScanEnabled")
+    .optional()
+    .isBoolean().withMessage("Privacy scan must be a boolean"),
+
+  validateRequest as unknown as (req: Request, res: Response, next: NextFunction) => void,
+];
+
 export const changePasswordRules = [
   body("currentPassword")
     .notEmpty().withMessage("Current password is required"),

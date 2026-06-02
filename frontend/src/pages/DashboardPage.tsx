@@ -1,15 +1,17 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { Wifi, Plus, Scan, Bell } from "lucide-react";
+import { Wifi, Plus, Scan, Bell, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { LoadingState } from "@/components/dashboard/LoadingState";
 import { EmptyState } from "@/components/dashboard/EmptyState";
 import { DeviceCard } from "@/components/tagx/DeviceCard";
+import { AddDeviceDialog } from "@/components/tagx/AddDeviceDialog";
 import { ActivityTimeline } from "@/components/tagx/ActivityTimeline";
-import { PageLayout } from "@/components/shared";
+import { PageLayout, PageHeader } from "@/components/shared";
 import { useAuthStore } from "@/stores/authStore";
 import api from "@/lib/api";
 import { formatRelativeTime } from "@/lib/utils";
@@ -17,26 +19,34 @@ import { containerVariants, itemVariants } from "@/lib/animations";
 import type { TrackingDevice, TrackingEvent } from "@/types/device.types";
 import type { TimelineEvent } from "@/components/tagx/ActivityTimeline";
 
-const quickActions = [
-  {
-    label: "Scan for Trackers",
-    icon: Scan,
-    variant: "default" as const,
-    onClick: () => toast.info("Scanning for nearby trackers..."),
-  },
-  {
-    label: "Add Device",
-    icon: Plus,
-    variant: "secondary" as const,
-    onClick: () => toast.info("Feature coming soon"),
-  },
-  {
-    label: "View Alerts",
-    icon: Bell,
-    variant: "secondary" as const,
-    onClick: () => toast.info("No new alerts"),
-  },
-];
+function quickActions(navigate: ReturnType<typeof useNavigate>, setAddOpen: (v: boolean) => void) {
+  return [
+    {
+      label: "Scan for Trackers",
+      icon: Scan,
+      variant: "default" as const,
+      onClick: () => toast.info("Scanning for nearby trackers..."),
+    },
+    {
+      label: "Add Device",
+      icon: Plus,
+      variant: "secondary" as const,
+      onClick: () => setAddOpen(true),
+    },
+    {
+      label: "Family Network",
+      icon: Users,
+      variant: "secondary" as const,
+      onClick: () => navigate("/family"),
+    },
+    {
+      label: "View Alerts",
+      icon: Bell,
+      variant: "secondary" as const,
+      onClick: () => navigate("/alerts"),
+    },
+  ];
+}
 
 function mapEvent(event: TrackingEvent): TimelineEvent {
   return {
@@ -55,29 +65,30 @@ export default function DashboardPage() {
   const [devices, setDevices] = useState<TrackingDevice[]>([]);
   const [events, setEvents] = useState<TrackingEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [addOpen, setAddOpen] = useState(false);
+
+  const fetchDevices = useCallback(async () => {
+    try {
+      const { data: devRes } = await api.get("/devices");
+      const fetchedDevices: TrackingDevice[] = devRes.data.devices ?? [];
+      setDevices(fetchedDevices);
+      if (fetchedDevices.length > 0) {
+        const firstId = fetchedDevices[0]._id;
+        const { data: evtRes } = await api.get(`/devices/${firstId}/events?limit=5`);
+        setEvents(evtRes.data.events ?? []);
+      } else {
+        setEvents([]);
+      }
+    } catch {
+      toast.error("Failed to load dashboard data");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    let cancelled = false;
-    async function load() {
-      try {
-        const { data: devRes } = await api.get("/devices");
-        const fetchedDevices: TrackingDevice[] = devRes.data.devices ?? [];
-        if (cancelled) return;
-        setDevices(fetchedDevices);
-        if (fetchedDevices.length > 0) {
-          const firstId = fetchedDevices[0]._id;
-          const { data: evtRes } = await api.get(`/devices/${firstId}/events?limit=5`);
-          if (!cancelled) setEvents(evtRes.data.events ?? []);
-        }
-      } catch {
-        if (!cancelled) toast.error("Failed to load dashboard data");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-    load();
-    return () => { cancelled = true; };
-  }, []);
+    fetchDevices();
+  }, [fetchDevices]);
 
   const stats = useMemo(() => {
     const total = devices.length;
@@ -110,15 +121,15 @@ export default function DashboardPage() {
         className="space-y-8"
       >
         <motion.div variants={itemVariants}>
-          <h1 className="text-h1 text-foreground">
-            Welcome back, {user?.name ?? "User"}
-          </h1>
-          <p className="text-body-small text-muted-foreground mt-1">{today}</p>
+          <PageHeader
+            title={`Welcome back, ${user?.name ?? "User"}`}
+            description={today}
+          />
         </motion.div>
 
         <motion.div
           variants={itemVariants}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4"
         >
           <MetricCard label="Total Devices" value={stats.total} sublabel="All registered devices" />
           <MetricCard
@@ -142,13 +153,17 @@ export default function DashboardPage() {
           />
         </motion.div>
 
-        <motion.div variants={itemVariants} className="flex flex-wrap gap-3">
-          {quickActions.map((action) => (
-            <Button key={action.label} variant={action.variant} onClick={action.onClick} className="gap-2">
-              <action.icon className="w-4 h-4" />
-              {action.label}
-            </Button>
-          ))}
+        <motion.div variants={itemVariants}>
+          <Card>
+            <CardContent className="p-5 flex flex-wrap gap-3">
+              {quickActions(navigate, setAddOpen).map((action) => (
+                <Button key={action.label} variant={action.variant} onClick={action.onClick} className="gap-2">
+                  <action.icon className="w-4 h-4" />
+                  {action.label}
+                </Button>
+              ))}
+            </CardContent>
+          </Card>
         </motion.div>
 
         <motion.div variants={itemVariants} className="space-y-4">
@@ -158,7 +173,7 @@ export default function DashboardPage() {
               icon={Wifi}
               title="No devices yet"
               description="Add your first tracking device to start monitoring."
-              action={<Button onClick={() => toast.info("Feature coming soon")}><Plus className="w-4 h-4 mr-1" />Add Device</Button>}
+              action={<Button onClick={() => setAddOpen(true)}><Plus className="w-4 h-4 mr-1" />Add Device</Button>}
             />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -189,12 +204,14 @@ export default function DashboardPage() {
         {events.length > 0 && (
           <motion.div variants={itemVariants} className="space-y-4">
             <h2 className="text-h4 text-foreground">Recent Events</h2>
-            <div className="rounded-xl border border-border bg-card p-5">
+            <div className="rounded-xl ring-1 ring-foreground/10 bg-card p-5">
               <ActivityTimeline events={events.map(mapEvent)} maxItems={5} />
             </div>
           </motion.div>
         )}
       </motion.div>
+
+      <AddDeviceDialog open={addOpen} onOpenChange={setAddOpen} onSuccess={fetchDevices} />
     </PageLayout>
   );
 }

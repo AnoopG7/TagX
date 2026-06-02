@@ -7,7 +7,7 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "../utils/tokens.js";
-import type { IUser } from "../models/user.model.js";
+import type { IUser, IUserPreferences } from "../models/user.model.js";
 
 function sanitizeUser(user: IUser) {
   return {
@@ -192,6 +192,25 @@ export async function changePassword(
   user.password = newPassword;
   user.refreshToken = undefined;
   await user.save();
+}
+
+export async function updateProfile(
+  userId: string,
+  updates: { name?: string; phone?: string; preferences?: Partial<IUserPreferences> }
+) {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw ApiError.notFound("User not found");
+  }
+
+  if (updates.name !== undefined) user.name = updates.name;
+  if (updates.phone !== undefined) user.phone = updates.phone;
+  if (updates.preferences !== undefined) {
+    user.preferences = { ...user.preferences, ...updates.preferences };
+  }
+
+  await user.save();
+  return sanitizeUser(user);
 }
 
 export async function getMe(userId: string) {

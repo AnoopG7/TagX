@@ -8,12 +8,11 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
 
-  // Actions
   setAuth: (user: User, accessToken: string) => void;
   logout: () => Promise<void>;
   fetchMe: () => Promise<void>;
   updateUser: (user: Partial<User>) => void;
-  hydrate: () => void;
+  hydrate: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -31,7 +30,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       await api.post("/auth/logout");
     } catch {
-      // Silently fail — clear local state regardless
+      // Silently fail
     } finally {
       localStorage.removeItem("accessToken");
       set({
@@ -48,7 +47,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({ isLoading: true });
       const { data } = await api.get("/auth/me");
       set({
-        user: data.data,
+        user: data.data.user,
         isAuthenticated: true,
         isLoading: false,
       });
@@ -68,11 +67,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
-  hydrate: () => {
+  hydrate: async () => {
     const token = localStorage.getItem("accessToken");
     if (token) {
       set({ accessToken: token });
-      get().fetchMe();
+      await get().fetchMe();
     } else {
       set({ isLoading: false });
     }

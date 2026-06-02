@@ -21,7 +21,19 @@ const permissionLabels: Record<FamilyPermission, string> = {
 };
 
 interface AddForm { name: string; email: string; phone: string; role: string; relationship: string; }
+interface FormErrors { name?: string; email?: string; phone?: string; role?: string; }
 const initialForm: AddForm = { name: "", email: "", phone: "", role: "member", relationship: "family" };
+
+const EMAIL_RE = /^\S+@\S+\.\S+$/;
+
+function validateForm(form: AddForm): FormErrors {
+  const e: FormErrors = {};
+  if (!form.name.trim()) e.name = "Name is required";
+  else if (form.name.trim().length > 60) e.name = "Name cannot exceed 60 characters";
+  if (form.email.trim() && !EMAIL_RE.test(form.email.trim())) e.email = "Enter a valid email address";
+  if (form.phone.trim() && !/^\d{10}$/.test(form.phone.trim())) e.phone = "Enter a valid 10-digit mobile number";
+  return e;
+}
 
 export default function FamilyPage() {
   const [members, setMembers] = useState<FamilyMember[]>([]);
@@ -29,6 +41,7 @@ export default function FamilyPage() {
   const [addOpen, setAddOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<FamilyMember | null>(null);
   const [form, setForm] = useState<AddForm>(initialForm);
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
 
   const fetchMembers = async () => {
@@ -45,16 +58,22 @@ export default function FamilyPage() {
   useEffect(() => { fetchMembers(); }, []);
 
   const handleAdd = async () => {
+    const errors = validateForm(form);
+    setFormErrors(errors);
+    if (Object.keys(errors).length > 0) return;
     setSubmitting(true);
     try {
       await api.post("/family", form);
       toast.success("Family member added");
       setAddOpen(false);
       setForm(initialForm);
+      setFormErrors({});
       setLoading(true);
       await fetchMembers();
-    } catch { toast.error("Failed to add member"); }
-    finally { setSubmitting(false); }
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message || "Failed to add member";
+      toast.error(msg);
+    } finally { setSubmitting(false); }
   };
 
   const handleDelete = async (id: string) => {
@@ -64,7 +83,9 @@ export default function FamilyPage() {
       setDeleteTarget(null);
       setLoading(true);
       await fetchMembers();
-    } catch { toast.error("Failed to remove member"); }
+    } catch {
+      toast.error("Failed to remove member");
+    }
   };
 
   if (loading) {
@@ -116,7 +137,7 @@ export default function FamilyPage() {
                   role={member.role}
                   avatar={member.avatar}
                   devices={member.devices}
-                  status={member.status as any}
+                  status={member.status}
                   location={member.location}
                   isOwner={member.isOwner}
                 />
@@ -145,15 +166,18 @@ export default function FamilyPage() {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="fm-name">Name</Label>
-              <Input id="fm-name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+              <Input id="fm-name" value={form.name} onChange={(e) => { setForm({ ...form, name: e.target.value }); setFormErrors({ ...formErrors, name: undefined }); }} className={formErrors.name ? "border-destructive" : ""} />
+              {formErrors.name && <p className="text-xs text-destructive">{formErrors.name}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="fm-email">Email</Label>
-              <Input id="fm-email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+              <Input id="fm-email" type="email" value={form.email} onChange={(e) => { setForm({ ...form, email: e.target.value }); setFormErrors({ ...formErrors, email: undefined }); }} className={formErrors.email ? "border-destructive" : ""} />
+              {formErrors.email && <p className="text-xs text-destructive">{formErrors.email}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="fm-phone">Phone</Label>
-              <Input id="fm-phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+              <Input id="fm-phone" value={form.phone} onChange={(e) => { setForm({ ...form, phone: e.target.value }); setFormErrors({ ...formErrors, phone: undefined }); }} className={formErrors.phone ? "border-destructive" : ""} />
+              {formErrors.phone && <p className="text-xs text-destructive">{formErrors.phone}</p>}
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -185,7 +209,7 @@ export default function FamilyPage() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setAddOpen(false)}>Cancel</Button>
-            <Button onClick={handleAdd} disabled={submitting || !form.name.trim()}>
+            <Button onClick={handleAdd} disabled={submitting}>
               {submitting ? "Adding..." : "Add Member"}
             </Button>
           </DialogFooter>

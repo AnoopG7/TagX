@@ -52,9 +52,8 @@ export default function LoginPage() {
         email: data.email,
         password: data.password,
       });
-      const accessToken = res.data.data?.accessToken ?? res.data.accessToken;
-      localStorage.setItem("accessToken", accessToken);
-      await useAuthStore.getState().fetchMe();
+      const { user, accessToken } = res.data.data;
+      useAuthStore.getState().setAuth(user, accessToken);
       navigate("/dashboard");
     } catch (err: unknown) {
       const error = err as { response?: { data?: { message?: string } } };

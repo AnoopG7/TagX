@@ -25,6 +25,7 @@ interface UIState {
 
   theme: "dark" | "light";
   toggleTheme: () => void;
+  setTheme: (theme: "dark" | "light") => void;
 
   isGlobalLoading: boolean;
   setGlobalLoading: (loading: boolean) => void;
@@ -51,6 +52,10 @@ export const useUIStore = create<UIState>((set) => {
         applyTheme(next);
         return { theme: next };
       }),
+    setTheme: (theme) => {
+      applyTheme(theme);
+      set({ theme });
+    },
 
     isGlobalLoading: false,
     setGlobalLoading: (loading) => set({ isGlobalLoading: loading }),
