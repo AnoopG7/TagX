@@ -11,6 +11,7 @@ import ShowcasePage from "@/pages/ShowcasePage";
 import HomePage from "@/pages/HomePage";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
+import FAQPage from "@/pages/FAQPage";
 import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
@@ -149,6 +150,14 @@ export default function App() {
           element={
             <AppLayout>
               <ContactPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/faq"
+          element={
+            <AppLayout>
+              <FAQPage />
             </AppLayout>
           }
         />

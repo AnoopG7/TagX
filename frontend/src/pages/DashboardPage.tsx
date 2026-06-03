@@ -119,7 +119,8 @@ export default function DashboardPage() {
       (e) => e.severity === "error" || e.severity === "critical"
     ).length;
     const recoveryRate = total > 0 ? Math.round((active / total) * 100) : 0;
-    return { total, active, alertsToday, recoveryRate };
+    const gpsSynced = devices.filter((d) => d.location?.lat && d.location?.lng).length;
+    return { total, active, alertsToday, recoveryRate, gpsSynced };
   }, [devices, events]);
 
   const today = new Date().toLocaleDateString("en-IN", {
@@ -151,7 +152,7 @@ export default function DashboardPage() {
 
         <motion.div
           variants={itemVariants}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4"
         >
           <MetricCard label="Total Devices" value={stats.total} sublabel="All registered devices" />
           <MetricCard
@@ -160,6 +161,12 @@ export default function DashboardPage() {
             sublabel="Currently online"
             progress={stats.total > 0 ? (stats.active / stats.total) * 100 : 0}
             progressColor="primary"
+          />
+          <MetricCard
+            label="GPS Synced"
+            value={stats.gpsSynced}
+            sublabel="Devices with GPS data"
+            progress={stats.total > 0 ? (stats.gpsSynced / stats.total) * 100 : 0}
           />
           <MetricCard
             label="Alerts Today"

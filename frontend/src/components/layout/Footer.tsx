@@ -51,15 +51,22 @@ export function Footer() {
               Support
             </h3>
             <ul className="space-y-3">
-              {["FAQ", "Shipping", "Returns", "Privacy Policy", "Terms of Service"].map(
-                (item) => (
-                  <li key={item}>
-                    <span className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 cursor-pointer">
-                      {item}
-                    </span>
-                  </li>
-                )
-              )}
+              {[
+                { label: "FAQ", href: "/faq" },
+                { label: "Shipping", href: "#" },
+                { label: "Returns", href: "#" },
+                { label: "Privacy Policy", href: "#" },
+                { label: "Terms of Service", href: "#" },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link
+                    to={item.href}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

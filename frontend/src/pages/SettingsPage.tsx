@@ -97,7 +97,7 @@ export default function SettingsPage() {
 
   return (
     <PageLayout>
-      <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8">
+      <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8 max-w-2xl mx-auto">
         <motion.div variants={itemVariants}>
           <PageHeader title="Settings" description="Manage your profile and preferences" />
         </motion.div>

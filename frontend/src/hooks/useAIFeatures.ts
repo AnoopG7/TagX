@@ -47,7 +47,7 @@ export function useAIFeatures({ deviceId, deviceName, locationHistory, isTrackin
     }
   }, []);
 
-  // On start tracking → Groq leave prediction
+  // On start tracking → AI leave prediction
   useEffect(() => {
     if (isTracking && !prevTrackingRef.current && !generatedPredictionRef.current) {
       generatedPredictionRef.current = true;
@@ -65,7 +65,7 @@ export function useAIFeatures({ deviceId, deviceName, locationHistory, isTrackin
     }
   }, [isTracking, deviceName, create, addToFeed]);
 
-  // Every 10 ticks → Groq location insight
+  // Every 10 ticks → AI location insight
   useEffect(() => {
     if (!isTracking || locationHistory.length < 2) return;
     const currentTick = Math.floor(locationHistory.length / 10);
@@ -80,7 +80,7 @@ export function useAIFeatures({ deviceId, deviceName, locationHistory, isTrackin
     }
   }, [tick, isTracking, locationHistory, create, addToFeed]);
 
-  // On stop tracking → Groq session summary
+  // On stop tracking → AI session summary
   useEffect(() => {
     if (prevTrackingRef.current && !isTracking && locationHistory.length > 1) {
       const last = locationHistory[locationHistory.length - 1];

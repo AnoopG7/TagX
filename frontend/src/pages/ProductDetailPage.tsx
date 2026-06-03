@@ -10,6 +10,7 @@ import { PageLayout } from "@/components/shared/PageLayout";
 import { containerVariants, itemVariants } from "@/lib/animations";
 import api from "@/lib/api";
 import { formatPrice } from "@/lib/utils";
+import { getProductImage } from "@/lib/product-images";
 import type { Product } from "@/types/product.types";
 
 const specLabels: Record<string, string> = {
@@ -27,7 +28,6 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     if (!slug) return;
@@ -88,7 +88,7 @@ export default function ProductDetailPage() {
     );
   }
 
-  const displayImage = product.images[selectedImage] || product.images[0];
+  const productImage = getProductImage(product.slug);
 
   return (
     <PageLayout>
@@ -115,32 +115,11 @@ export default function ProductDetailPage() {
               className="aspect-square rounded-xl overflow-hidden bg-card border"
             >
               <img
-                src={displayImage?.url || "/placeholder.jpg"}
-                alt={displayImage?.alt || product.name}
+                src={productImage}
+                alt={product.name}
                 className="w-full h-full object-cover"
               />
             </motion.div>
-            {product.images.length > 1 && (
-              <div className="flex gap-3">
-                {product.images.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setSelectedImage(i)}
-                    className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${
-                      i === selectedImage
-                        ? "border-primary"
-                        : "border-border hover:border-foreground/20"
-                    }`}
-                  >
-                    <img
-                      src={img.url}
-                      alt={img.alt || product.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
 
           <motion.div

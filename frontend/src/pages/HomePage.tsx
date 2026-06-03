@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  ShieldCheck, Radar, Monitor, Brain, Shield, Users,
-  Battery, Bell, Sparkles, LayoutDashboard, Check, X, Map, History, Search,
+  Radar, Monitor, Brain, Shield, Users,
+  Battery, Bell, Sparkles, LayoutDashboard, Check, X, Map, History, Cpu,
 } from "lucide-react";
 import { HeroBackground } from "@/components/common/HeroBackground";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,8 @@ const comparison = [
   { feature: "Anti-stalking", good: ["Day 1", "After lawsuits", "Basic", "Basic"] },
   { feature: "No subscription needed", good: ["Yes", "Yes", "Yes", "Paid alerts"] },
   { feature: "Family sharing", good: ["With roles", "Basic", "Basic", "Premium"] },
+  { feature: "Offline GPS logging", good: ["GPS logs", "Crowd only", "Crowd only", "Crowd only"] },
+  { feature: "Path history", good: ["Full GPS trail", "—", "—", "—"] },
   { feature: "India pricing", good: ["₹3,000", "₹3,200+", "₹3,499", "₹2,800+"] },
 ];
 
@@ -66,8 +68,8 @@ export default function HomePage() {
               variants={fadeUp}
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20 mb-8"
             >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              Privacy-first. Cross-platform. AI-powered.
+              <Cpu className="w-3.5 h-3.5" />
+              GPS + AI Powered
             </motion.div>
 
             <motion.h1
@@ -82,7 +84,7 @@ export default function HomePage() {
               variants={fadeUp}
               className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed"
             >
-              TagX is the smart tracker that works across every phone, learns your habits, and keeps you protected — not just located.
+              TagX combines GPS + BLE + AI — it logs your location even without a phone nearby, then uses AI to learn your habits and keep you protected.
             </motion.p>
 
             <motion.div variants={fadeUp} className="mt-8 flex items-center justify-center gap-4">
@@ -109,8 +111,8 @@ export default function HomePage() {
               <p className="text-sm text-muted-foreground mt-1">Android users locked out of AirTag</p>
             </div>
             <div className="text-center p-4 rounded-xl bg-muted/30 border">
-              <div className="text-3xl md:text-4xl font-display font-bold text-foreground">₹999</div>
-              <p className="text-sm text-muted-foreground mt-1">Starting price (vs AirTag's ₹3,000+)</p>
+              <div className="text-3xl md:text-4xl font-display font-bold text-foreground">₹3,000</div>
+              <p className="text-sm text-muted-foreground mt-1">Per tag — no subscription needed</p>
             </div>
             <div className="text-center p-4 rounded-xl bg-muted/30 border">
               <div className="text-3xl md:text-4xl font-display font-bold text-foreground">15.35%</div>
@@ -118,6 +120,63 @@ export default function HomePage() {
             </div>
           </motion.div>
           </motion.div>
+        </Container>
+      </section>
+
+      {/* AI Dashboard */}
+      <section className="py-20 md:py-32 bg-muted/30">
+        <Container>
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 mb-4">
+              <Brain className="size-3" /> GPS + AI
+            </div>
+            <p className="text-sm font-medium text-primary tracking-widest uppercase mb-3">AI Dashboard</p>
+            <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight">
+              Intelligence at your fingertips
+            </h2>
+            <p className="mt-4 text-muted-foreground text-lg">
+              Every tracked device feeds into a live AI dashboard that learns, alerts, and protects — automatically.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="p-6 rounded-xl bg-card border group hover:border-primary/30 transition-all duration-200">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-all duration-200">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <h3 className="font-display font-semibold text-lg text-foreground mb-1">AI Insights</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                AI & ML generate observations about your device usage patterns, location trends, and predictive suggestions — like knowing when you're about to leave something behind.
+              </p>
+            </div>
+            <div className="p-6 rounded-xl bg-card border group hover:border-primary/30 transition-all duration-200">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-all duration-200">
+                <Bell className="w-5 h-5" />
+              </div>
+              <h3 className="font-display font-semibold text-lg text-foreground mb-1">Smart Notifications</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Real-time alerts about device activity, separation warnings, and helpful reminders — delivered to your dashboard instantly by AI that understands context.
+              </p>
+            </div>
+            <div className="p-6 rounded-xl bg-card border group hover:border-primary/30 transition-all duration-200">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-all duration-200">
+                <Shield className="w-5 h-5" />
+              </div>
+              <h3 className="font-display font-semibold text-lg text-foreground mb-1">Privacy Alerts</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Instant warnings about unknown tracker detections and unusual behavior — AI-powered anti-stalking built in from day one.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center mt-8">
+            <Link to="/dashboard">
+              <Button size="lg" className="gap-2">
+                <LayoutDashboard className="w-5 h-5" />
+                Open Your AI Dashboard
+              </Button>
+            </Link>
+          </div>
         </Container>
       </section>
 
@@ -182,7 +241,7 @@ export default function HomePage() {
                     {row.good.map((val, j) => (
                       <td key={j} className={`p-3 md:p-4 ${j === 0 ? "text-primary font-medium" : "text-muted-foreground"}`}>
                         <span className="inline-flex items-center gap-1.5">
-                          {j > 0 && (val === "—" || val === "No" || val === "After lawsuits" || val === "Basic" || val === "Premium" || val === "Paid alerts" || val === "Limited")
+                          {j > 0 && (val === "—" || val === "No" || val === "After lawsuits" || val === "Basic" || val === "Premium" || val === "Paid alerts" || val === "Limited" || val === "Crowd only")
                             ? <X className="w-3.5 h-3.5 shrink-0" />
                             : j > 0 ? <Check className="w-3.5 h-3.5 text-green-600 shrink-0" /> : null}
                           {val}
@@ -221,51 +280,6 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* AI Dashboard */}
-      <section className="py-20 md:py-32">
-        <Container>
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <p className="text-sm font-medium text-primary tracking-widest uppercase mb-3">AI Dashboard</p>
-            <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight">
-              Intelligence at your fingertips
-            </h2>
-            <p className="mt-4 text-muted-foreground text-lg">
-              Every tracked device feeds into a live dashboard that learns, alerts, and protects — automatically.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-xl bg-card border group hover:border-primary/30 transition-all duration-200">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-all duration-200">
-                <Sparkles className="w-5 h-5" />
-              </div>
-              <h3 className="font-display font-semibold text-lg text-foreground mb-1">AI Insights</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                AI-generated observations about device usage patterns, location trends, and predictive suggestions — like knowing when you're about to leave something behind.
-              </p>
-            </div>
-            <div className="p-6 rounded-xl bg-card border group hover:border-primary/30 transition-all duration-200">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-all duration-200">
-                <Bell className="w-5 h-5" />
-              </div>
-              <h3 className="font-display font-semibold text-lg text-foreground mb-1">Smart Notifications</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Real-time notifications about device activity, security events, and helpful reminders — delivered to your dashboard so you never miss what matters.
-              </p>
-            </div>
-            <div className="p-6 rounded-xl bg-card border group hover:border-primary/30 transition-all duration-200">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-all duration-200">
-                <Shield className="w-5 h-5" />
-              </div>
-              <h3 className="font-display font-semibold text-lg text-foreground mb-1">Privacy Alerts</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Instant warnings about unknown tracker detections, unusual device behavior, and security concerns — anti-stalking built in from day one.
-              </p>
-            </div>
-          </div>
-        </Container>
-      </section>
-
       {/* Market opportunity */}
       <section className="py-20 md:py-32">
         <Container>
@@ -299,16 +313,16 @@ export default function HomePage() {
               One tag. Three ways to use it.
             </h2>
             <p className="mt-4 text-muted-foreground text-lg">
-              Every TagX tag starts at ₹3,000 with lifetime basic access. Upgrade as your needs grow.
+              ₹3,000 for the tag. Pick a yearly plan that fits — family sharing, AI + path tracing, or both.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {/* Basic */}
             <div className="p-6 rounded-xl bg-card border">
-              <div className="text-sm font-medium text-muted-foreground mb-1">TagX Basic</div>
+              <div className="text-sm font-medium text-muted-foreground mb-1">TagX Tag</div>
               <div className="text-3xl font-display font-bold text-foreground mb-1">₹3,000 <span className="text-base font-normal text-muted-foreground">/ tag</span></div>
-              <p className="text-sm text-muted-foreground mb-6">One tag + lifetime portal for 1 person. Everything you need to never lose your stuff.</p>
+              <p className="text-sm text-muted-foreground mb-6">The hardware tag. One user, lifetime access, no subscription.</p>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />Real-time location tracking</li>
                 <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />Basic separation alerts</li>
@@ -316,43 +330,41 @@ export default function HomePage() {
                 <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />1 user, lifetime access</li>
                 <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />18-month battery, IP67</li>
               </ul>
-              <Button className="w-full mt-6" size="sm">Buy now — ₹3,000</Button>
+              <Button className="w-full mt-6" size="sm">Buy tag — ₹3,000</Button>
             </div>
 
-            {/* Family */}
+            {/* Family plan */}
             <div className="p-6 rounded-xl bg-card border-2 border-primary relative">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-medium">
                 Most popular
               </div>
-              <div className="text-sm font-medium text-primary mb-1">TagX Family</div>
-              <div className="text-3xl font-display font-bold text-foreground mb-1">₹5,999 <span className="text-base font-normal text-muted-foreground">/ 4 tags</span></div>
-              <p className="text-sm text-muted-foreground mb-6">Track what your whole household cares about. Share access with family.</p>
+              <div className="text-sm font-medium text-primary mb-1">+ Family Plan</div>
+              <div className="text-3xl font-display font-bold text-foreground mb-1">+₹500 <span className="text-base font-normal text-muted-foreground">/ year</span></div>
+              <p className="text-sm text-muted-foreground mb-6">Share tags, geofences, and alerts with up to 5 family members. ₹500/year per account.</p>
               <ul className="space-y-2 text-sm">
-                <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />4x TagX tags</li>
                 <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />Family sharing (up to 5 members)</li>
                 <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />Shared tags & geofence zones</li>
                 <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />Role-based access control</li>
-                <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />Lifetime portal for all members</li>
+                <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />Everyone gets lifetime portal</li>
+                <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />Yearly billing, cancel anytime</li>
               </ul>
-              <Button className="w-full mt-6" size="sm" variant="default">Buy now — ₹5,999</Button>
+              <Button className="w-full mt-6" size="sm" variant="default">Add Family — ₹500/yr</Button>
             </div>
 
-            {/* Pro */}
+            {/* AI Pro plan */}
             <div className="p-6 rounded-xl bg-card border">
-              <div className="text-sm font-medium text-muted-foreground mb-1">TagX Pro</div>
-              <div className="text-3xl font-display font-bold text-foreground mb-1">₹8,999 <span className="text-base font-normal text-muted-foreground">/ 4 tags</span></div>
-              <p className="text-sm text-muted-foreground mb-6">Full AI suite + path tracing for power users and large families.</p>
+              <div className="text-sm font-medium text-muted-foreground mb-1">+ AI Pro</div>
+              <div className="text-3xl font-display font-bold text-foreground mb-1">+₹999 <span className="text-base font-normal text-muted-foreground">/ year</span></div>
+              <p className="text-sm text-muted-foreground mb-6">AI & ML insights, predictive alerts, path tracing, and full movement history. Includes all Family Plan features. ₹999/year per account.</p>
               <ul className="space-y-2 text-sm">
-                <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />4x TagX tags</li>
-                <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />Up to 10 members</li>
+                <li className="flex items-center gap-2"><Brain className="w-3.5 h-3.5 text-primary shrink-0" />AI & ML-powered insights</li>
+                <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-primary shrink-0" />AI habit learning & predictive alerts</li>
                 <li className="flex items-center gap-2"><Map className="w-3.5 h-3.5 text-primary shrink-0" />Path tracing & movement history</li>
-                <li className="flex items-center gap-2"><Brain className="w-3.5 h-3.5 text-primary shrink-0" />AI habit learning & predictive alerts</li>
-                <li className="flex items-center gap-2"><Search className="w-3.5 h-3.5 text-primary shrink-0" />Natural language chat with tags</li>
                 <li className="flex items-center gap-2"><History className="w-3.5 h-3.5 text-primary shrink-0" />30-day location timeline</li>
-                <li className="flex items-center gap-2"><Shield className="w-3.5 h-3.5 text-primary shrink-0" />Unknown tag detection (anti-stalking)</li>
-                <li className="flex items-center gap-2"><Bell className="w-3.5 h-3.5 text-primary shrink-0" />Priority support</li>
+                <li className="flex items-center gap-2"><Shield className="w-3.5 h-3.5 text-primary shrink-0" />Anti-stalking & unknown tag detection</li>
+                <li className="flex items-center gap-2"><Users className="w-3.5 h-3.5 text-primary shrink-0" />Family sharing (up to 5 members) included</li>
               </ul>
-              <Button className="w-full mt-6" size="sm" variant="outline">Buy now — ₹8,999</Button>
+              <Button className="w-full mt-6" size="sm" variant="outline">Add AI Pro — ₹999/yr</Button>
             </div>
           </div>
         </Container>
