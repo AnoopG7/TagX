@@ -98,8 +98,7 @@ async function seed() {
       costPrice: 1200,
       sku: "TGX-PRO-B2C-001",
       images: [
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-pro", publicId: "tagx/tagx-pro", alt: "TagX Pro front view", isPrimary: true },
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-pro-back", publicId: "tagx/tagx-pro-back", alt: "TagX Pro back view", isPrimary: false },
+        { url: "/TagX Pro.png", publicId: "tagx-pro", alt: "TagX Pro front view", isPrimary: true },
       ],
       category: "personal",
       tags: ["premium", "waterproof", "long-range", "best-seller", "b2c"],
@@ -117,7 +116,7 @@ async function seed() {
       costPrice: 900,
       sku: "TGX-MINI-B2C-002",
       images: [
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-mini", publicId: "tagx/tagx-mini", alt: "TagX Mini next to credit card", isPrimary: true },
+        { url: "/TagX Mini.png", publicId: "tagx-mini", alt: "TagX Mini next to credit card", isPrimary: true },
       ],
       category: "personal",
       tags: ["slim", "wallet", "compact", "card-slot", "b2c"],
@@ -136,7 +135,7 @@ async function seed() {
       costPrice: 1400,
       sku: "TGX-PET-B2C-003",
       images: [
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-pet", publicId: "tagx/tagx-pet", alt: "TagX Pet on dog collar", isPrimary: true },
+        { url: "/TagX Pet.png", publicId: "tagx-pet", alt: "TagX Pet on dog collar", isPrimary: true },
       ],
       category: "pet",
       tags: ["pet", "dog", "cat", "collar", "waterproof", "b2c"],
@@ -154,7 +153,7 @@ async function seed() {
       costPrice: 1300,
       sku: "TGX-VHL-B2C-004",
       images: [
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-vehicle", publicId: "tagx/tagx-vehicle", alt: "TagX Vehicle mounted in car", isPrimary: true },
+        { url: "/Tagx Bike.png", publicId: "tagx-vehicle", alt: "TagX Vehicle mounted in car", isPrimary: true },
       ],
       category: "vehicle",
       tags: ["vehicle", "car", "bike", "gps", "anti-theft", "b2c"],
@@ -173,7 +172,7 @@ async function seed() {
       costPrice: 1000,
       sku: "TGX-LUG-B2C-005",
       images: [
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-luggage", publicId: "tagx/tagx-luggage", alt: "TagX Luggage on suitcase", isPrimary: true },
+        { url: "/TagX Luggage.png", publicId: "tagx-luggage", alt: "TagX Luggage on suitcase", isPrimary: true },
       ],
       category: "luggage",
       tags: ["travel", "luggage", "suitcase", "airport", "global", "b2c"],
@@ -191,8 +190,7 @@ async function seed() {
       costPrice: 1500,
       sku: "TGX-KIDS-B2C-006",
       images: [
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-kids", publicId: "tagx/tagx-kids", alt: "TagX Kids on child's wristband", isPrimary: true },
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-kids-blue", publicId: "tagx/tagx-kids-blue", alt: "TagX Kids blue variant", isPrimary: false },
+        { url: "/TagX Kids.png", publicId: "tagx-kids", alt: "TagX Kids on child's wristband", isPrimary: true },
       ],
       category: "kids",
       tags: ["kids", "safety", "geofence", "sos", "parental", "b2c"],
@@ -210,7 +208,7 @@ async function seed() {
       costPrice: 1100,
       sku: "TGX-WALLET-B2C-007",
       images: [
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-wallet", publicId: "tagx/tagx-wallet", alt: "TagX Wallet Card next to credit cards", isPrimary: true },
+        { url: "/TagX Mini.png", publicId: "tagx-wallet", alt: "TagX Wallet Card next to credit cards", isPrimary: true },
       ],
       category: "personal",
       tags: ["wallet", "card", "slim", "long-battery", "b2c"],
@@ -230,7 +228,7 @@ async function seed() {
       costPrice: 7000,
       sku: "TGX-ENT-HUB-001",
       images: [
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-enterprise-hub", publicId: "tagx/tagx-enterprise-hub", alt: "TagX Enterprise Hub device", isPrimary: true },
+        { url: "/TagX Pro.png", publicId: "tagx-enterprise-hub", alt: "TagX Enterprise Hub device", isPrimary: true },
       ],
       category: "enterprise",
       tags: ["enterprise", "gateway", "fleet-management", "api", "b2b"],
@@ -249,7 +247,7 @@ async function seed() {
       costPrice: 10000,
       sku: "TGX-PRO-B2B-010",
       images: [
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-pro-10pack", publicId: "tagx/tagx-pro-10pack", alt: "TagX Pro 10-pack box", isPrimary: true },
+        { url: "/TagX Pro.png", publicId: "tagx-pro-10pack", alt: "TagX Pro 10-pack box", isPrimary: true },
       ],
       category: "enterprise",
       tags: ["enterprise", "bulk", "fleet", "warehouse", "b2b", "best-seller"],
@@ -268,7 +266,7 @@ async function seed() {
       costPrice: 5500,
       sku: "TGX-VHL-B2B-005",
       images: [
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-vehicle-5pack", publicId: "tagx/tagx-vehicle-5pack", alt: "TagX Vehicle 5-pack", isPrimary: true },
+        { url: "/Tagx Bike.png", publicId: "tagx-vehicle-5pack", alt: "TagX Vehicle 5-pack", isPrimary: true },
       ],
       category: "enterprise",
       tags: ["enterprise", "fleet", "vehicle", "logistics", "b2b", "gps"],
@@ -286,7 +284,7 @@ async function seed() {
       costPrice: 5000,
       sku: "TGX-API-B2B-001",
       images: [
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-api", publicId: "tagx/tagx-api", alt: "TagX API dashboard", isPrimary: true },
+        { url: "/TagX Pro.png", publicId: "tagx-api", alt: "TagX API dashboard", isPrimary: true },
       ],
       category: "enterprise",
       tags: ["enterprise", "api", "integration", "saas", "b2b"],
@@ -305,7 +303,7 @@ async function seed() {
       costPrice: 18000,
       sku: "TGX-RETAIL-B2B-020",
       images: [
-        { url: "https://res.cloudinary.com/demo/image/upload/v1/tagx/tagx-retail-kit", publicId: "tagx/tagx-retail-kit", alt: "TagX Retail Inventory Kit", isPrimary: true },
+        { url: "/TagX Mini.png", publicId: "tagx-retail-kit", alt: "TagX Retail Inventory Kit", isPrimary: true },
       ],
       category: "enterprise",
       tags: ["enterprise", "retail", "inventory", "warehouse", "b2b"],

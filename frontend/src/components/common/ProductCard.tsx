@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils";
+import { getProductImage } from "@/lib/product-images";
 import type { Product } from "@/types/product.types";
 
 export function ProductCard({
@@ -38,7 +39,7 @@ export function ProductCard({
       <Card className="group relative overflow-hidden bg-card border-border hover:border-primary/30 transition-all duration-200 h-full">
         <Link to={`/products/${product.slug}`} className="block relative overflow-hidden aspect-square">
           <img
-            src={product.images[0]?.url || "/placeholder.jpg"}
+            src={getProductImage(product.slug)}
             alt={product.name}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             loading="lazy"
