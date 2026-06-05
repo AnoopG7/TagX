@@ -6,6 +6,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ProtectedRoute, GuestRoute } from "@/components/common/ProtectedRoute";
+import { CartDrawer } from "@/components/layout/CartDrawer";
 
 import ShowcasePage from "@/pages/ShowcasePage";
 import HomePage from "@/pages/HomePage";
@@ -26,6 +27,10 @@ import AlertsPage from "@/pages/AlertsPage";
 import InsightsPage from "@/pages/InsightsPage";
 import NotificationsPage from "@/pages/NotificationsPage";
 import TrackingPage from "@/pages/TrackingPage";
+import CartPage from "@/pages/CartPage";
+import CheckoutPage from "@/pages/CheckoutPage";
+import OrdersPage from "@/pages/OrdersPage";
+import OrderDetailPage from "@/pages/OrderDetailPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 
 const pageTransition = {
@@ -244,6 +249,45 @@ export default function App() {
         />
 
         <Route
+          path="/cart"
+          element={
+            <AppLayout>
+              <CartPage />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <AppLayout>
+              <ProtectedRoute>
+                <CheckoutPage />
+              </ProtectedRoute>
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <AppLayout>
+              <ProtectedRoute>
+                <OrdersPage />
+              </ProtectedRoute>
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/orders/:id"
+          element={
+            <AppLayout>
+              <ProtectedRoute>
+                <OrderDetailPage />
+              </ProtectedRoute>
+            </AppLayout>
+          }
+        />
+
+        <Route
           path="*"
           element={
             <AppLayout>
@@ -264,6 +308,8 @@ export default function App() {
           },
         }}
       />
+
+      <CartDrawer />
     </>
   );
 }

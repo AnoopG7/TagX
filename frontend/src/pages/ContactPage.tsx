@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { PageLayout } from "@/components/shared/PageLayout";
 import { containerVariants, itemVariants } from "@/lib/animations";
 import { Link } from "react-router-dom";
+import api from "@/lib/api";
 
 const contactMethods = [
   { icon: Mail, label: "Email", value: "hello@tagx.com", detail: "We reply within 24 hours" },
@@ -29,10 +30,24 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise((r) => setTimeout(r, 1000));
-    setIsSubmitting(false);
-    toast.success("Message sent! We'll get back to you within 24 hours.");
-    (e.target as HTMLFormElement).reset();
+
+    const formData = new FormData(e.currentTarget);
+    const payload = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      subject: formData.get("subject") as string,
+      message: formData.get("message") as string,
+    };
+
+    try {
+      await api.post("/contact", payload);
+      toast.success("Message sent! We'll get back to you within 24 hours.");
+      (e.target as HTMLFormElement).reset();
+    } catch {
+      toast.error("Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -70,17 +85,18 @@ export default function ContactPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Name</Label>
-                  <Input id="name" placeholder="Your name" required />
+                  <Input id="name" name="name" placeholder="Your name" required />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="you@example.com" required />
+                  <Input id="email" name="email" type="email" placeholder="you@example.com" required />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="subject">Subject</Label>
                 <select
                   id="subject"
+                  name="subject"
                   required
                   className="w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-2 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
                 >
@@ -97,6 +113,7 @@ export default function ContactPage() {
                 <Label htmlFor="message">Message</Label>
                 <textarea
                   id="message"
+                  name="message"
                   rows={5}
                   required
                   className="h-24 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1.5 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm resize-y"

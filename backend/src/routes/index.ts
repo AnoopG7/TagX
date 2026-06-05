@@ -7,6 +7,8 @@ import alertRoutes from "./alert.routes.js";
 import insightRoutes from "./insight.routes.js";
 import familyRoutes from "./family.routes.js";
 import aiRoutes from "./ai.routes.js";
+import orderRoutes from "./order.routes.js";
+import contactRoutes from "./contact.routes.js";
 
 const router = Router();
 
@@ -26,5 +28,8 @@ router.use("/alerts", alertRoutes);
 router.use("/insights", insightRoutes);
 router.use("/family", familyRoutes);
 router.use("/ai", aiRoutes);
+router.use("/orders", orderRoutes);
+router.use("/contact", contactRoutes);
 
 export default router;
+

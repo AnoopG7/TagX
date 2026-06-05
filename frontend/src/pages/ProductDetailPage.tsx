@@ -12,6 +12,7 @@ import api from "@/lib/api";
 import { formatPrice } from "@/lib/utils";
 import { getProductImage } from "@/lib/product-images";
 import type { Product } from "@/types/product.types";
+import { useCartStore } from "@/stores/cartStore";
 
 const specLabels: Record<string, string> = {
   battery: "Battery",
@@ -28,6 +29,9 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [qty, setQty] = useState(1);
+  const addItem = useCartStore((s) => s.addItem);
+  const openCart = useCartStore((s) => s.openCart);
 
   useEffect(() => {
     if (!slug) return;
@@ -222,16 +226,37 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            <Button
-              size="lg"
-              className="w-full sm:w-auto"
-              onClick={() =>
-                toast.success("Coming soon — pre-order available")
-              }
-            >
-              <ShoppingCart className="w-5 h-5 mr-2" />
-              Buy Now
-            </Button>
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center border rounded-lg">
+                <button
+                  className="px-3 py-2 text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => setQty((q) => Math.max(1, q - 1))}
+                >
+                  −
+                </button>
+                <span className="px-4 py-2 text-sm font-medium text-foreground min-w-[2.5rem] text-center">
+                  {qty}
+                </span>
+                <button
+                  className="px-3 py-2 text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => setQty((q) => q + 1)}
+                >
+                  +
+                </button>
+              </div>
+              <Button
+                size="lg"
+                className="flex-1 sm:flex-none"
+                onClick={() => {
+                  addItem({ product, quantity: qty, color: "default" });
+                  openCart();
+                  toast.success(`${product.name} added to cart`);
+                }}
+              >
+                <ShoppingCart className="w-5 h-5 mr-2" />
+                Add to Cart
+              </Button>
+            </div>
           </motion.div>
         </div>
       </motion.div>
