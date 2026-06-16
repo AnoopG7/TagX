@@ -32,24 +32,24 @@ async function main() {
   wb.creator = "TagX Financial Model — India 2026";
 
   // ── Inputs ────────────────────────────────────────
-  const TAGS = [250, 500, 1000, 3000, 10000];
-  const TAG_PR = [3000, 3200, 3500, 4000, 4500];
-  const USERS = [200, 850, 2500, 9000, 20000];
+  const TAGS = [250, 500, 1300, 3000, 10000];
+  const TAG_PR = [2699, 2999, 3199, 3499, 3999];
+  const USERS = [200, 850, 2000, 5000, 10000];
   const FAM_PR = [599, 599, 799, 999, 999];
   const AI_PR = [999, 999, 1200, 1500, 1500];
-  const FAM_ATT = [0.15, 0.20, 0.25, 0.40, 0.45];
-  const AI_ATT = [0.15, 0.15, 0.25, 0.35, 0.40];
-  const ACC_PCT = 0.03;
+  const FAM_ATT = [0.25, 0.30, 0.40, 0.40, 0.45];
+  const AI_ATT = [0.25, 0.30, 0.40, 0.40, 0.40];
+  const ACC_PCT = [0.03, 0.03, 0.04, 0.04, 0.05];
 
-  const B2B_U = [2, 8, 30, 100, 250];
-  const B2B_RPU = [3999, 3999, 4499, 4499, 4999];
-  const SaaS_S = [0, 2, 6, 20, 50];
-  const SaaS_M = [499, 499, 699, 799, 999];
+  const B2B_U = [5, 10, 30, 100, 200];
+  const B2B_RPU = [4999, 4999, 5499, 5999, 5999];
+  const SaaS_S = [5, 10, 30, 60, 100];
+  const SaaS_M = [499, 499, 699, 699, 799];
   const Cell_S = [0, 3, 12, 40, 100];
   const Cell_M = [75, 75, 70, 65, 60];
-  const Hub_U = [0, 1, 2, 6, 15];
+  const Hub_U = [1, 2, 5, 10, 15];
   const Hub_PR = 14999;
-  const API_PR = 19999;
+  const API_PR = 24999;
   const WL_R = [0, 0, 100000, 500000, 1500000];
 
   // China-sourced BOM (landed cost incl duty & shipping)
@@ -60,11 +60,11 @@ async function main() {
   const CEL_DAT = [15, 15, 14, 13, 12];
   const MFG_O = [0.06, 0.06, 0.05, 0.05, 0.05];
 
-  const TEAM = [2, 4, 6, 10, 15];
-  const SALARIES = [180000, 1400000, 3600000, 6000000, 9600000];
-  const RD_EXP = [100000, 150000, 200000, 250000, 300000];
+  const TEAM = [2, 4, 5, 10, 15];
+  const SALARIES = [180000, 1400000, 3000000, 6000000, 9600000];
+  const RD_EXP = [100000, 120000, 150000, 250000, 300000];
   const MKTG = [100000, 300000, 600000, 1000000, 2000000];
-  const B2B_S = [0, 30000, 100000, 300000, 800000];
+  const B2B_S = [10000, 30000, 100000, 300000, 800000];
   const SUPP = [24000, 60000, 180000, 400000, 800000];
   const COMP = [150000, 150000, 200000, 300000, 500000];
   const GA = [50000, 75000, 150000, 300000, 500000];
@@ -97,7 +97,7 @@ async function main() {
   const tRev = TAGS.map((t, i) => t * TAG_PR[i]);
   const famSubRev = USERS.map((u, i) => Math.round(u * FAM_ATT[i] * FAM_PR[i]));
   const aiSubRev = USERS.map((u, i) => Math.round(u * AI_ATT[i] * AI_PR[i]));
-  const acRev = tRev.map(t => Math.round(t * ACC_PCT));
+  const acRev = tRev.map((t, i) => Math.round(t * ACC_PCT[i]));
   const b2cT = tRev.map((_, i) => tRev[i] + famSubRev[i] + aiSubRev[i] + acRev[i]);
 
   const flRev = B2B_U.map((u, i) => u * B2B_RPU[i]);
@@ -215,7 +215,7 @@ async function main() {
     ["Family Plan Price (₹)", ...FAM_PR, "Cloud tracking, location history"],
     ["AI Pro Attach Rate", ...AI_ATT, "% of active users — ₹999→₹1,200→₹1,500"],
     ["AI Pro Price (₹)", ...AI_PR, "AI insights, geofencing, family sharing"],
-    ["Accessories (% of hardware rev)", ACC_PCT, ACC_PCT, 0.04, 0.04, 0.05, "Straps, mounts, cases"],
+    ["Accessories (% of hardware rev)", ...ACC_PCT, "Straps, mounts, cases"],
     ["", 0, 0, 0, 0, 0, ""],
     ["── B2B ──", 0, 0, 0, 0, 0, ""],
     ["Fleet Units Deployed", ...B2B_U, "Pilot → enterprise eval → scale"],
@@ -556,11 +556,11 @@ async function main() {
 
   const beRows: [string, number | string, number | string, string][] = [
     ["── B2C UNIT ECONOMICS ──", "", "", ""],
-    ["Selling Price per Tag (₹)", `${TAG_PR[0]}→${TAG_PR[2]}→${TAG_PR[4]}`, "", "₹3,000 intro, ₹3,500 Y3, ₹4,500 Y5"],
+    ["Selling Price per Tag (₹)", `${TAG_PR[0]}→${TAG_PR[2]}→${TAG_PR[4]}`, "", `₹${TAG_PR[0]} intro, ₹${TAG_PR[2]} Y3, ₹${TAG_PR[4]} Y5`],
     ["COGS per Tag (BOM + Assembly)", 830, "", "₹750 + ₹80 (China-sourced, Y1 volumes)"],
     ["Manufacturing Overhead (₹)", "~50", "", "~6% of unit COGS"],
     ["Total COGS per Tag (₹)", 880, "", ""],
-    ["Gross Profit per Tag (₹)", 2120, "", "~71% margin"],
+    ["Gross Profit per Tag (₹)", TAG_PR[0] - 880, "", `~${Math.round((TAG_PR[0] - 880) / TAG_PR[0] * 100)}% margin`],
     ["", 0, 0, ""],
     ["Monthly Fixed Costs (Y1 est.)", "₹1,00,000", "", "2 founders lean salaries + cloud + basic operations"],
     ["Monthly Tags to Cover Fixed", "~47", "", "₹1L ÷ ₹2,120"],

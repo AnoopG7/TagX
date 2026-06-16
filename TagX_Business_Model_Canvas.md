@@ -101,7 +101,7 @@
 | Stream | Model | Price |
 |---|---|---|
 | **TagX Tag** (hardware) | One-time purchase | ₹3,000 / tag |
-| **Family Plan** | Yearly subscription | ₹500 / account / yr |
+| **Family Plan** | Yearly subscription | ₹599 / account / yr |
 | **AI Pro** (incl. all Family features) | Yearly subscription | ₹999 / account / yr |
 | **Accessories** | Cases, mounts, straps, batteries | ₹199 – ₹999 |
 
@@ -109,18 +109,17 @@
 
 | Stream | Model | Price |
 |---|---|---|
-| **B2B Fleet Packs** | Bulk hardware (10x / 20x packs) + fleet console | ₹9,999 – ₹34,999 |
+| **B2B Fleet Packs** | Bulk hardware (10x / 20x packs) + fleet console | ₹49,990 – ₹79,980 |
 | **Enterprise Hub + API** | Gateway hardware + annual API subscription | ₹14,999 + ₹24,999/yr |
 | **Cellular/NB-IoT Add-on** | Per-device monthly fee for real-time GPS via cellular | ₹50–₹100 / device / month |
 | **White-Label / OEM** | Custom branded hardware for businesses | Volume pricing (min 25 units) |
 | **B2B SaaS Dashboard** | Monthly/annual license for fleet management console | ₹499–₹1,999 / month |
 
 **Revenue Mix Estimate (Year 3):**
-- B2C Hardware: ~40%
-- B2C Plan Add-ons: ~20%
-- B2B Hardware Packs: ~20%
-- B2B Subscriptions (SaaS + Cellular): ~15%
-- Accessories: ~5%
+- B2C Hardware: ~64%
+- B2C Plan Add-ons: ~24%
+- B2B (fleet + SaaS): ~9%
+- Accessories: ~3%
 
 ---
 

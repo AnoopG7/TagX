@@ -22,7 +22,7 @@ export const registerRules = [
     .matches(/[0-9]/).withMessage("Password must contain a number"),
 
   body("confirmPassword")
-    .notEmpty().withMessage("Please confirm your password")
+    .optional({ values: "falsy" })
     .custom((val, { req }) => val === req.body.password)
     .withMessage("Passwords do not match"),
 
@@ -65,7 +65,7 @@ export const resetPasswordRules = [
     .matches(/[0-9]/).withMessage("Password must contain a number"),
 
   body("confirmPassword")
-    .notEmpty().withMessage("Please confirm your password")
+    .optional({ values: "falsy" })
     .custom((val, { req }) => val === req.body.password)
     .withMessage("Passwords do not match"),
 
